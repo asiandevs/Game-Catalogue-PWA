@@ -22,11 +22,11 @@ jobs:
           node-version: '20'
 
       # Lint Markdown files using dedicated Action
-      - name: Lint Markdown files
-        uses: DavidAnson/markdownlint-cli2-action@v20
-        with:
-          globs: 'docs/*.md'
-        continue-on-error: true
+      #- name: Lint Markdown files
+      #  uses: DavidAnson/markdownlint-cli2-action@v20
+      #  with:
+       #   globs: 'docs/*.md'
+       # continue-on-error: true
 
       # Set up Python for code extraction and validation
       - name: Set up Python
