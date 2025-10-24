@@ -1,36 +1,36 @@
 <h1>Part 1: Environment Setup and Project Overview</h1>
-<p>This file is part of the <strong>Full-Stack Annotated Study Guide: Game Catalogue PWA</strong><br>repository. It covers setting up your development environment and understanding the<br>project structure for building a Progressive Web App (PWA) using SQLite, Node.js, and<br>HTML/CSS/JS. See <a href="../README.md">README.md</a> for the full guide.</p>
+<p>This file is part of the <strong>Full-Stack Annotated Study Guide: Game Catalogue PWA</strong><br>repo. It covers setting up your dev environment and understanding the project<br>structure for a Progressive Web App (PWA) using SQLite, Node.js, and HTML/CSS/JS.<br>See <a href="../README.md">README.md</a> for the full guide.</p>
 <h2>Installing VS Code, Node.js, SQLite</h2>
-<p>To build the Game Catalogue PWA, start by setting up your development tools on macOS.<br>These form the foundation for coding, running servers, and managing the database.</p>
+<p>To build the Game Catalogue PWA, set up your development tools on macOS. These form<br>the foundation for coding, running servers, and managing the database.</p>
 <ul>
 <li><p><strong>Install VS Code</strong>:</p>
 <ul>
 <li>Visit <a href="https://code.visualstudio.com">code.visualstudio.com</a>.</li>
 <li>Download the &quot;Mac Universal&quot; version.</li>
-<li>Extract the .zip file and drag &quot;Visual Studio Code&quot; to your Applications folder.</li>
+<li>Extract the .zip and drag &quot;Visual Studio Code&quot; to your Applications folder.</li>
 <li>Launch VS Code from Applications.</li>
-<li><em>Annotation</em>: VS Code is a lightweight, extensible code editor ideal for full-stack<br>development. It supports extensions for syntax highlighting, debugging, and live<br>previews, making it perfect for HTML/CSS/JS and Node.js workflows.</li>
+<li><em>Annotation</em>: VS Code is a lightweight, extensible code editor ideal for<br>full-stack development. It supports extensions for syntax highlighting,<br>debugging, and live previews, making it perfect for HTML/CSS/JS and Node.js.</li>
 </ul>
 </li>
 <li><p><strong>Install Node.js</strong>:</p>
 <ul>
 <li>Go to <a href="https://nodejs.org">nodejs.org</a>.</li>
-<li>Download the LTS (Long Term Support) version for stability.</li>
-<li>Open the .pkg file and follow the installer prompts, entering your admin password<br>as needed.</li>
-<li>Verify installation in Terminal: <code>node --version</code> (expect something like v20.x.x)<br>and <code>npm --version</code>.</li>
-<li><em>Annotation</em>: Node.js enables server-side JavaScript, crucial for the backend. NPM<br>(Node Package Manager) handles dependencies like Express. LTS ensures compatibility<br>and security updates.</li>
+<li>Download the LTS version for stability.</li>
+<li>Open the .pkg file and follow the installer prompts, entering your admin<br>password as needed.</li>
+<li>Verify in Terminal: <code>node --version</code> (e.g., v20.x.x) and <code>npm --version</code>.</li>
+<li><em>Annotation</em>: Node.js enables server-side JavaScript, crucial for the backend.<br>NPM (Node Package Manager) handles dependencies like Express. LTS ensures<br>compatibility and security updates.</li>
 </ul>
 </li>
 <li><p><strong>Install SQLite3</strong>:</p>
 <ul>
 <li>SQLite3 is pre-installed on macOS. Verify with <code>sqlite3 --version</code> in Terminal.</li>
 <li>If missing (rare), install via Homebrew: <code>brew install sqlite</code>.</li>
-<li><em>Annotation</em>: SQLite is a lightweight, file-based relational database. It&#39;s<br>serverless, making it ideal for PWAs where data persistence is needed without a<br>full DBMS like MySQL. Here, it&#39;s used for storing game data locally.</li>
+<li><em>Annotation</em>: SQLite is a lightweight, file-based relational database. It&#39;s<br>serverless, ideal for PWAs needing data persistence without a full DBMS like<br>MySQL. Here, it stores game data locally.</li>
 </ul>
 </li>
 </ul>
 <h2>Understanding Folder Structure and Workflow</h2>
-<p>The project uses a structured folder layout created via a Bash script (see Part 2).<br>Key folders include:</p>
+<p>The project uses a structured folder layout created via a Bash script (Part 2).<br>Key folders include:</p>
 <ul>
 <li><code>css/</code> for stylesheets.</li>
 <li><code>js/</code> for JavaScript logic.</li>
@@ -41,7 +41,7 @@
 </ul>
 <p><strong>Workflow</strong>:</p>
 <ol>
-<li>Setup environment and folders.</li>
+<li>Set up environment and folders.</li>
 <li>Initialize database with schema and sample data.</li>
 <li>Build backend server to expose API endpoints.</li>
 <li>Develop frontend pages with HTML/CSS/JS, fetching data via API.</li>
@@ -49,12 +49,12 @@
 <li>Test with Live Server or direct browser opening.</li>
 </ol>
 <p><em>Annotation</em>: This structure separates concerns (MVC-like: Model=DB, View=HTML/CSS,<br>Controller=JS/Node). Workflow emphasizes automation (scripting) and iteration (edit<br>in VS Code, preview with Live Server).</p>
-<h2>Overview of Project Goals (How Backend + Frontend + Database Fit Together)</h2>
+<h2>Overview of Project Goals (Backend + Frontend + Database)</h2>
 <p>The goal is a responsive PWA for browsing a game catalogue, with features like<br>searching, filtering, and offline viewing.</p>
 <ul>
 <li><strong>Database (SQLite)</strong>: Stores game data (titles, genres, platforms, etc.).</li>
 <li><strong>Backend (Node.js + Express)</strong>: Serves API endpoints to query the DB, handles<br>static files (HTML/CSS/JS).</li>
 <li><strong>Frontend (HTML/CSS/JS)</strong>: Renders pages, fetches data via fetch API, updates UI<br>dynamically.</li>
-<li><strong>Integration</strong>: Frontend calls backend APIs (e.g., /api/games), which query SQLite<br>and return JSON. PWA elements (manifest, service worker) enable installation and<br>caching for offline use.</li>
+<li><strong>Integration</strong>: Frontend calls backend APIs (e.g., /api/games), which query<br>SQLite and return JSON. PWA elements (manifest, service worker) enable<br>installation and caching for offline use.</li>
 </ul>
 <p><em>Annotation</em>: This full-stack approach teaches data flow in web apps. It&#39;s<br>scalable—start local, deploy to hosting like Heroku.</p>
