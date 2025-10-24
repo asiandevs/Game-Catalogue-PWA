@@ -1,6 +1,6 @@
 # Part 7: Frontend (HTML, CSS, JS Overview)
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the frontend structure for the game catalogue PWA. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the frontend structure for the game catalogue PWA. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)].
 
 ## Structure of the Main Pages (Home, Catalogue, About)
 
