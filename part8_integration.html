@@ -1,0 +1,90 @@
+<h1>Part 8: How It All Works Together</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how the frontend, backend, and database integrate, plus PWA concepts and next steps. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
+<h2>Flow of Data Between Frontend ⇄ Backend ⇄ Database</h2>
+<ol>
+<li><strong>User loads</strong> <code>index.html</code> (served by Node.js static file serving)</li>
+<li><strong>Frontend JS</strong> (<code>app.js</code>) fetches <code>/api/games</code> → Backend queries SQLite → Returns JSON</li>
+<li><strong>Frontend renders</strong> data (e.g., populates catalogue grid with game cards)</li>
+<li><strong>Updates</strong>: POST to API → Backend INSERT/UPDATE in DB → Frontend refreshes view</li>
+</ol>
+<pre><code class="language-javascript">// Example fetch in app.js
+fetch(&#39;/api/games&#39;)
+  .then(response =&gt; response.json())
+  .then(games =&gt; {
+    displayGames(games);
+    updateStats(games.length);
+  })
+  .catch(error =&gt; console.error(&#39;Error:&#39;, error));
+</code></pre>
+<p><strong>Annotation:</strong> This client-server model decouples UI from data. Use <code>fetch()</code> or Axios for API calls. Error handling is crucial for production apps.</p>
+<h2>PWA Concepts (Service Worker, Manifest)</h2>
+<h3>manifest.json:</h3>
+<pre><code class="language-json">{
+    &quot;name&quot;: &quot;Game Catalogue&quot;,
+    &quot;short_name&quot;: &quot;GamesPWA&quot;,
+    &quot;start_url&quot;: &quot;/index.html&quot;,
+    &quot;display&quot;: &quot;standalone&quot;,
+    &quot;background_color&quot;: &quot;#ffffff&quot;,
+    &quot;theme_color&quot;: &quot;#333333&quot;,
+    &quot;icons&quot;: [
+        {
+            &quot;src&quot;: &quot;images/icon-192.png&quot;,
+            &quot;sizes&quot;: &quot;192x192&quot;,
+            &quot;type&quot;: &quot;image/png&quot;
+        },
+        {
+            &quot;src&quot;: &quot;images/icon-512.png&quot;,
+            &quot;sizes&quot;: &quot;512x512&quot;,
+            &quot;type&quot;: &quot;image/png&quot;
+        }
+    ]
+}
+</code></pre>
+<h3>service-worker.js:</h3>
+<pre><code class="language-javascript">const CACHE_NAME = &#39;games-cache-v1&#39;;
+const urlsToCache = [
+  &#39;/&#39;,
+  &#39;/index.html&#39;,
+  &#39;/catalogue.html&#39;,
+  &#39;/about.html&#39;,
+  &#39;/css/style.css&#39;,
+  &#39;/js/app.js&#39;,
+  &#39;/manifest.json&#39;
+];
+
+self.addEventListener(&#39;install&#39;, event =&gt; {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache =&gt; cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener(&#39;fetch&#39;, event =&gt; {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response =&gt; response || fetch(event.request))
+  );
+});
+</code></pre>
+<p><strong>Annotation:</strong> Service workers enable offline functionality by caching static assets. Manifest makes the app installable like a native app. Test in Chrome DevTools → Application tab.</p>
+<h2>Best Practices and Next-Step Ideas</h2>
+<h3>Best Practices:</h3>
+<ul>
+<li>Use ESLint/Prettier for code quality and consistency</li>
+<li>Version control with Git (commit messages, branching strategy)</li>
+<li>Test APIs with Postman or Thunder Client (VS Code extension)</li>
+<li>Sanitize inputs to prevent SQL injection/XSS attacks</li>
+<li>Use HTTPS in production for secure data transmission</li>
+<li>Implement proper error handling and loading states</li>
+</ul>
+<h3>Next Steps:</h3>
+<ul>
+<li>Add user authentication (login/logout)</li>
+<li>Implement advanced search and filtering forms</li>
+<li>Deploy to Vercel/Netlify (frontend) and Heroku/Railway (backend)</li>
+<li>Integrate external game APIs (RAWG, IGDB) for more data</li>
+<li>Explore WebAssembly for heavy database operations</li>
+<li>Add real-time features with WebSockets</li>
+<li>Implement image optimization and lazy loading</li>
+</ul>
+<p><strong>Annotation:</strong> Iterate with user feedback. This project builds transferable skills for real-world full-stack applications. Start simple, then gradually add complexity based on learning goals.</p>
