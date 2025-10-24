@@ -1,5 +1,7 @@
 # Game Catalogue PWA Study Guide
+
 A full-stack guide for building a game catalogue PWA. See the docs folder for details:
+
 - [Part 1: Environment Setup](part1_environment_setup.md)
 - [Part 2: Bash Setup](part2_bash_setup.md)
 - [Part 3: Backend Code](part3_backend_code.md)
@@ -8,7 +10,6 @@ A full-stack guide for building a game catalogue PWA. See the docs folder for de
 - [Part 6: SQLite Operations](part6_sqlite_operations.md)
 - [Part 7: Frontend Overview](part7_frontend_overview.md)
 - [Part 8: Integration](part8_integration.md)
-
 
 ## 📘 Part 1: Environment Setup and Project Overview
 
