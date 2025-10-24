@@ -1,6 +1,6 @@
 # Part 5: Common Queries (queries.sql)
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It provides sample SQL queries for the game catalogue database. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It provides sample SQL queries for the game catalogue database. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)].
 
 ## Detailed Explanation of 15 Sample Queries
 
