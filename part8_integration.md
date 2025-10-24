@@ -1,6 +1,6 @@
 # Part 8: How It All Works Together
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how the frontend, backend, and database integrate, plus PWA concepts and next steps. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how the frontend, backend, and database integrate, plus PWA concepts and next steps. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)].
 
 ## Flow of Data Between Frontend ⇄ Backend ⇄ Database
 
