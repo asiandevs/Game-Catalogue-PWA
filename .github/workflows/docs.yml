@@ -22,17 +22,24 @@ jobs:
           node-version: '20'
           cache: 'npm'  # Cache npm dependencies
 
+      # Lint Markdown files using dedicated Action
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          globs: 'docs/*.md'
+        continue-on-error: true
+
       # Set up Python for code extraction and validation
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Install SQLite via dedicated Action
-      - name: Setup SQLite
-        uses: actions/setup-sqlite@v1
-        with:
-          sqlite-version: '3.45.0'  # Stable version
+      # Verify SQLite is available (pre-installed on ubuntu-latest)
+      - name: Verify SQLite
+        run: |
+          sqlite3 --version
+        continue-on-error: true
 
       # Extract and validate code blocks from Markdown
       - name: Extract and Validate Code Blocks
@@ -46,7 +53,7 @@ jobs:
           def extract_code_blocks(md_file, lang):
               with open(md_file, 'r') as f:
                   content = f.read()
-              # Regex for ```lang ... ```
+              # Regex for ```lang ... ``` (handles 'bash', 'javascript', 'js', 'sql')
               pattern = rf'```(?:{lang})\s*\n(.*?)\n```'
               matches = re.findall(pattern, content, re.DOTALL)
               return '\n'.join(matches) if matches else ''
@@ -62,8 +69,8 @@ jobs:
                   subprocess.run(['bash', '-n', bash_path], check=True)
                   print(f'Bash syntax OK: {bash_path}')
 
-              # Extract JS from part3
-              js_code = extract_code_blocks('docs/part3_backend_code.md', 'javascript')
+              # Extract JS from part3 (handles 'javascript' or 'js')
+              js_code = extract_code_blocks('docs/part3_backend_code.md', 'javascript') or extract_code_blocks('docs/part3_backend_code.md', 'js')
               if js_code:
                   js_path = f'{tmpdir}/server.js'
                   with open(js_path, 'w') as f:
@@ -78,7 +85,8 @@ jobs:
                   with open(sql_path, 'w') as f:
                       f.write(sql_code)
                   db_path = f'{tmpdir}/test.db'
-                  subprocess.run(['sqlite3', db_path, '<', sql_path], check=True)
+                  # Use shell=True to handle the '<' redirection properly
+                  subprocess.run(f'sqlite3 {db_path} < {sql_path}', shell=True, check=True)
                   print(f'SQL validation OK: {sql_path}')
           EOF
         continue-on-error: true
@@ -88,7 +96,7 @@ jobs:
         run: |
           npm install -g marked
           mkdir -p public
-          if [ -d "docs" ]; then
+          if [ -d "docs" ] && ls docs/*.md 1> /dev/null 2>&1; then
             for file in docs/*.md; do
               if [ -f "$file" ]; then
                 base=$(basename "$file" .md)
@@ -96,7 +104,7 @@ jobs:
               fi
             done
           else
-            echo "No docs folder found, skipping build"
+            echo "No docs folder or Markdown files found, skipping build"
           fi
 
       # Deploy to GitHub Pages (only on push to main)
