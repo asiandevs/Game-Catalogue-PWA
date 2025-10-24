@@ -15,12 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up Node.js
+      # Set up Node.js (no caching)
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'  # Cache npm dependencies
 
       # Lint Markdown files using dedicated Action
       - name: Lint Markdown files
@@ -54,7 +53,7 @@ jobs:
               with open(md_file, 'r') as f:
                   content = f.read()
               # Regex for ```lang ... ``` (handles 'bash', 'javascript', 'js', 'sql')
-              pattern = rf'```(?:{lang})\s*\n(.*?)\n```'
+              pattern = rf'```(?:{lang}|js)\s*\n(.*?)\n```'
               matches = re.findall(pattern, content, re.DOTALL)
               return '\n'.join(matches) if matches else ''
 
@@ -70,7 +69,7 @@ jobs:
                   print(f'Bash syntax OK: {bash_path}')
 
               # Extract JS from part3 (handles 'javascript' or 'js')
-              js_code = extract_code_blocks('docs/part3_backend_code.md', 'javascript') or extract_code_blocks('docs/part3_backend_code.md', 'js')
+              js_code = extract_code_blocks('docs/part3_backend_code.md', 'javascript')
               if js_code:
                   js_path = f'{tmpdir}/server.js'
                   with open(js_path, 'w') as f:
@@ -85,7 +84,6 @@ jobs:
                   with open(sql_path, 'w') as f:
                       f.write(sql_code)
                   db_path = f'{tmpdir}/test.db'
-                  # Use shell=True to handle the '<' redirection properly
                   subprocess.run(f'sqlite3 {db_path} < {sql_path}', shell=True, check=True)
                   print(f'SQL validation OK: {sql_path}')
           EOF
