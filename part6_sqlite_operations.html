@@ -1,0 +1,53 @@
+<h1>Part 6: SQLite Operations &amp; Verification</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how to interact with the SQLite database. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
+<h2>How to Create, Open, and Inspect Databases</h2>
+<ol>
+<li><p><strong>Navigate to database folder:</strong></p>
+<pre><code class="language-bash">cd game-catalogue-pwa/database
+</code></pre>
+</li>
+<li><p><strong>Create/Run Schema:</strong></p>
+<pre><code class="language-bash">sqlite3 games.db &lt; schema.sql
+</code></pre>
+</li>
+<li><p><strong>Open SQLite Shell:</strong></p>
+<pre><code class="language-bash">sqlite3 games.db
+</code></pre>
+</li>
+<li><p><strong>Inspect Database:</strong></p>
+<pre><code class="language-sql">.tables                    -- List tables
+.schema games              -- View table structure
+SELECT * FROM games;       -- View data
+SELECT * FROM genres;      -- View genres
+SELECT * FROM platforms;   -- View platforms
+</code></pre>
+</li>
+<li><p><strong>Exit Shell:</strong></p>
+<pre><code class="language-sql">.exit
+</code></pre>
+</li>
+</ol>
+<p><strong>Annotation:</strong> The SQLite shell is interactive for testing. File-based DB means no server process—easy for local development.</p>
+<h2>Common Commands and Troubleshooting Tips</h2>
+<h3>Essential SQLite Commands:</h3>
+<pre><code class="language-sql">.headers on                   -- Show column names
+.mode column                  -- Formatted output
+.mode csv                     -- CSV format for export
+.output filename.csv          -- Redirect output to file
+.help                         -- List all commands
+PRAGMA foreign_keys = ON;     -- Enable foreign key constraints
+</code></pre>
+<h3>Troubleshooting:</h3>
+<ul>
+<li><strong>&quot;Table not found&quot;:</strong> Re-run schema with <code>sqlite3 games.db &lt; schema.sql</code></li>
+<li><strong>Access denied:</strong> Check file permissions in database folder</li>
+<li><strong>Foreign keys not working:</strong> Ensure <code>PRAGMA foreign_keys = ON;</code> is set</li>
+<li><strong>Data not persisting:</strong> Verify you&#39;re in the correct database file</li>
+<li><strong>Backup:</strong> Always backup DB before destructive operations</li>
+</ul>
+<p><strong>Annotation:</strong> Use <code>PRAGMA foreign_keys = ON;</code> to enforce referential integrity. Check SQLite documentation for specific error codes. For production, consider adding transactions for data consistency.</p>
+<ul>
+<li>Enhanced the annotation with additional practical advice</li>
+<li>Made the content more actionable with clear command examples</li>
+<li>Maintained all original content while improving organization and completeness</li>
+</ul>
