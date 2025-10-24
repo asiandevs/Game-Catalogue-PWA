@@ -1,6 +1,6 @@
 # Part 2: Bash Project Setup Script (setup-project.sh)
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains the Bash script to automate the project folder structure setup. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains the Bash script to automate the project folder structure setup. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)](../).
 
 ## Line-by-Line Breakdown of the Automation Script
 
