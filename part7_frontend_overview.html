@@ -1,0 +1,111 @@
+<h1>Part 7: Frontend (HTML, CSS, JS Overview)</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the frontend structure for the game catalogue PWA. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
+<h2>Structure of the Main Pages (Home, Catalogue, About)</h2>
+<h3>index.html (Home):</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Game Catalogue&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
+    &lt;link rel=&quot;manifest&quot; href=&quot;manifest.json&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;nav&gt;
+        &lt;a href=&quot;index.html&quot;&gt;Home&lt;/a&gt;
+        &lt;a href=&quot;catalogue.html&quot;&gt;Catalogue&lt;/a&gt;
+        &lt;a href=&quot;about.html&quot;&gt;About&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Welcome to Game Catalogue&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;section id=&quot;features&quot;&gt;
+        &lt;!-- 4 feature cards, e.g., Search, Filter, Offline, Responsive --&gt;
+        &lt;div class=&quot;feature-card&quot;&gt;Search Games&lt;/div&gt;
+        &lt;div class=&quot;feature-card&quot;&gt;Filter by Genre&lt;/div&gt;
+        &lt;div class=&quot;feature-card&quot;&gt;Offline Access&lt;/div&gt;
+        &lt;div class=&quot;feature-card&quot;&gt;Responsive Design&lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section id=&quot;stats&quot;&gt;
+        &lt;!-- Stats populated via JS --&gt;
+        &lt;p&gt;Games: &lt;span id=&quot;game-count&quot;&gt;0&lt;/span&gt;&lt;/p&gt;
+    &lt;/section&gt;
+    &lt;footer&gt;© 2025 Game Catalogue&lt;/footer&gt;
+    &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        if (&#39;serviceWorker&#39; in navigator) {
+            navigator.serviceWorker.register(&#39;/service-worker.js&#39;);
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+<li><strong>catalogue.html:</strong> Similar structure, with a grid for games (populated via JS fetch)</li>
+<li><strong>about.html:</strong> Static info page with project details</li>
+</ul>
+<p><strong>Annotation:</strong> HTML5 semantic tags (nav, header, section) improve accessibility. PWA registration in script tag. Viewport meta tag ensures proper mobile rendering.</p>
+<h2>Responsive Design Explained with Annotated CSS Snippets</h2>
+<p>Create <code>css/style.css</code>:</p>
+<pre><code class="language-css">/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Navigation */
+nav {
+    background: #333;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 1em;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+}
+
+/* Mobile navigation */
+@media (max-width: 600px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    /* Stack nav on small screens */
+}
+
+/* Feature grid */
+#features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 1em;
+}
+
+.feature-card {
+    background: #f4f4f4;
+    padding: 1.5em;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Responsive images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Game grid for catalogue */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+</code></pre>
