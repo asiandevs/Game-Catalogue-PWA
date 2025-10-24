@@ -1,0 +1,34 @@
+<h1>Part 3: Backend Code (server.js)</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the backend setup using Node.js and Express to serve API endpoints and static files. <a href="../"><a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a></a>.</p>
+<h2>Express.js and SQLite Integration</h2>
+<p>Create <code>server.js</code> in the project root to handle API and static serving. Install dependencies:<br><code>npm init -y &amp;&amp; npm install express sqlite3</code>.</p>
+<pre><code class="language-javascript">const express = require(&#39;express&#39;);
+const sqlite3 = require(&#39;sqlite3&#39;).verbose();
+const app = express();
+const db = new sqlite3.Database(&#39;./database/games.db&#39;);
+
+app.use(express.json());
+app.use(express.static(&#39;.&#39;)); // Serve static files (HTML, CSS, JS)
+
+app.get(&#39;/api/games&#39;, (req, res) =&gt; {
+    db.all(&#39;SELECT games.*, genres.name AS genre, platforms.name AS platform FROM games JOIN genres ON games.genre_id = genres.genre_id JOIN platforms ON games.platform_id = platforms.platform_id&#39;, [], (err, rows) =&gt; {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+app.listen(3000, () =&gt; console.log(&#39;Server running on port 3000&#39;));
+</code></pre>
+<p><strong>Annotation:</strong> Express is a minimal web framework for Node.js. sqlite3 module connects to the DB. This setup allows querying without CORS issues locally.</p>
+<h2>Middleware and Static File Serving</h2>
+<ul>
+<li><code>app.use(express.json())</code>: Parses JSON requests</li>
+<li><code>app.use(express.static(&#39;.&#39;))</code>: Serves frontend files from root (e.g., access index.html at localhost:3000)</li>
+</ul>
+<p><strong>Annotation:</strong> Middleware processes requests. Static serving turns Node into a simple web server, ideal for development.</p>
+<h2>API Route Explanation (/api/games)</h2>
+<ul>
+<li><code>GET /api/games</code>: Joins tables and returns all games as JSON with genre and platform names</li>
+<li>Error handling: Sends 500 on DB errors</li>
+</ul>
+<p><strong>Annotation:</strong> This endpoint enables frontend to fetch data. Expand with query params (e.g., <code>?genre=Action</code>) for filtering. Use async/await for cleaner code in production.</p>
