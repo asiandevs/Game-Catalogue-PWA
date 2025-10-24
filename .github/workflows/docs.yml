@@ -22,13 +22,6 @@ jobs:
           node-version: '20'
           cache: 'npm'  # Cache npm dependencies
 
-      # Lint Markdown files using dedicated Action
-      - name: Lint Markdown files
-        uses: DavidAnson/markdownlint-cli2-action@v20
-        with:
-          globs: 'docs/*.md'
-        continue-on-error: true
-
       # Set up Python for code extraction and validation
       - name: Set up Python
         uses: actions/setup-python@v5
