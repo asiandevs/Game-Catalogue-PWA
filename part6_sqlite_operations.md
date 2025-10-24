@@ -1,6 +1,6 @@
 # Part 6: SQLite Operations & Verification
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how to interact with the SQLite database. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how to interact with the SQLite database. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)].
 
 ## How to Create, Open, and Inspect Databases
 
