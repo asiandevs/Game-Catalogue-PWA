@@ -1,0 +1,102 @@
+<h1>Part 2: Bash Project Setup Script (setup-project.sh)</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains the Bash script to automate the project folder structure setup. <a href="../"><a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a></a>.</p>
+<h2>Line-by-Line Breakdown of the Automation Script</h2>
+<p>The script automates folder and file creation. Save as <code>setup-project.sh</code>:</p>
+<pre><code class="language-bash">#!/bin/bash
+
+# Create root folder
+mkdir -p game-catalogue-pwa
+cd game-catalogue-pwa
+
+# Create subfolders
+mkdir css js images database docs
+
+# Create HTML files
+touch index.html catalogue.html about.html
+
+# Create JS files
+touch js/app.js service-worker.js
+
+# Create PWA config
+touch manifest.json
+
+# Create CSS
+touch css/style.css
+
+# Create database files
+touch database/schema.sql database/queries.sql database/games.db
+
+# Add sample content to schema.sql (example schema)
+cat &lt;&lt; EOF &gt; database/schema.sql
+CREATE TABLE genres (
+    genre_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE platforms (
+    platform_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE games (
+    game_id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    genre_id INTEGER,
+    platform_id INTEGER,
+    publisher TEXT,
+    release_year INTEGER,
+    rating REAL,
+    price REAL,
+    description TEXT,
+    image_url TEXT,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id),
+    FOREIGN KEY (platform_id) REFERENCES platforms(platform_id)
+);
+
+-- Insert sample data
+INSERT INTO genres (name) VALUES (&#39;Action&#39;), (&#39;RPG&#39;), (&#39;Strategy&#39;), (&#39;Adventure&#39;), (&#39;Simulation&#39;), (&#39;Sports&#39;), (&#39;Puzzle&#39;), (&#39;Horror&#39;), (&#39;Fighting&#39;), (&#39;Racing&#39;);
+INSERT INTO platforms (name) VALUES (&#39;PC&#39;), (&#39;PlayStation&#39;), (&#39;Xbox&#39;), (&#39;Nintendo Switch&#39;), (&#39;Mobile&#39;), (&#39;VR&#39;), (&#39;Arcade&#39;), (&#39;Retro&#39;);
+-- Insert 10 games (example)
+INSERT INTO games (title, genre_id, platform_id, publisher, release_year, rating, price, description, image_url) VALUES 
+(&#39;The Legend of Zelda&#39;, 2, 4, &#39;Nintendo&#39;, 2017, 9.5, 59.99, &#39;Epic adventure game.&#39;, &#39;zelda.jpg&#39;),
+(&#39;Cyberpunk 2077&#39;, 2, 1, &#39;CD Projekt&#39;, 2020, 7.8, 49.99, &#39;Open-world RPG.&#39;, &#39;cyberpunk.jpg&#39;),
+(&#39;FIFA 23&#39;, 6, 2, &#39;EA Sports&#39;, 2022, 8.0, 69.99, &#39;Soccer simulation.&#39;, &#39;fifa.jpg&#39;),
+(&#39;Tetris&#39;, 7, 5, &#39;Tetris Holding&#39;, 1984, 9.0, 4.99, &#39;Classic puzzle game.&#39;, &#39;tetris.jpg&#39;),
+(&#39;God of War&#39;, 1, 2, &#39;Sony&#39;, 2018, 9.4, 39.99, &#39;Action-adventure epic.&#39;, &#39;gow.jpg&#39;),
+(&#39;SimCity&#39;, 5, 1, &#39;Maxis&#39;, 2013, 7.5, 29.99, &#39;City-building simulation.&#39;, &#39;simcity.jpg&#39;),
+(&#39;Street Fighter V&#39;, 9, 2, &#39;Capcom&#39;, 2016, 8.2, 29.99, &#39;Competitive fighting.&#39;, &#39;sfv.jpg&#39;),
+(&#39;Hollow Knight&#39;, 4, 4, &#39;Team Cherry&#39;, 2017, 9.3, 14.99, &#39;Metroidvania adventure.&#39;, &#39;hollow.jpg&#39;),
+(&#39;Forza Horizon 5&#39;, 10, 3, &#39;Playground Games&#39;, 2021, 9.1, 59.99, &#39;Open-world racing.&#39;, &#39;forza.jpg&#39;),
+(&#39;Resident Evil 4&#39;, 8, 2, &#39;Capcom&#39;, 2023, 9.2, 59.99, &#39;Survival horror.&#39;, &#39;re4.jpg&#39;);
+EOF
+
+# Make script executable (already done if running this)
+chmod +x ../setup-project.sh
+
+echo &quot;Project structure created!&quot;
+</code></pre>
+<h2>What Each Command Does</h2>
+<ul>
+<li><code>#!/bin/bash</code>: Shebang to run with Bash</li>
+<li><code>mkdir -p game-catalogue-pwa</code>: Creates root folder (<code>-p</code> prevents errors if exists)</li>
+<li><code>cd game-catalogue-pwa</code>: Navigates into it</li>
+<li><code>mkdir css js ...</code>: Creates subfolders</li>
+<li><code>touch file.html ...</code>: Creates empty files</li>
+<li><code>cat &lt;&lt; EOF &gt; file.sql</code>: Heredoc to write multi-line content to a file</li>
+<li><code>chmod +x</code>: Makes the script executable</li>
+<li><code>echo</code>: Prints success message</li>
+</ul>
+<h2>Notes &amp; Best Practices for Bash Scripting</h2>
+<ul>
+<li>Use <code>-p</code> with <code>mkdir</code> for idempotency</li>
+<li>Heredocs (<code>&lt;&lt; EOF</code>) are great for multi-line strings like SQL</li>
+<li>Always add error handling (e.g., <code>|| echo &quot;Error&quot;</code>)</li>
+<li>Version control: Commit this script to Git for reproducibility</li>
+<li>Best practice: Keep scripts modular; test in a temp dir first</li>
+</ul>
+<p><strong>Annotation:</strong> Bash automates repetitive setup, saving time. For cross-platform, consider tools like npm scripts.</p>
+<ul>
+<li>Standardized spacing and section organization</li>
+<li>Maintained all original content while improving readability</li>
+<li>Ensured code blocks are properly formatted with language specification</li>
+</ul>
