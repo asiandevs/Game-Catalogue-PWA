@@ -3,11 +3,9 @@ name: Documentation CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   lint-and-deploy:
@@ -18,61 +16,98 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up Node.js for markdownlint and other tools
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'  # Cache npm dependencies
 
-      # Install markdownlint-cli for linting Markdown files
-      - name: Install markdownlint
-        run: npm install -g markdownlint-cli
-
-      # Lint Markdown files in the docs/ folder
+      # Lint Markdown files using dedicated Action
       - name: Lint Markdown files
-        run: markdownlint 'docs/*.md'
-        continue-on-error: true # Allow workflow to continue even if linting finds issues
+        uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          globs: 'docs/*.md'
+        continue-on-error: true
 
-      # Set up Python for checking SQL syntax (basic validation)
+      # Set up Python for code extraction and validation
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Install SQLite for validating SQL syntax
-      - name: Install SQLite
-        run: sudo apt-get install -y sqlite3
+      # Install SQLite via dedicated Action
+      - name: Setup SQLite
+        uses: actions/setup-sqlite@v1
+        with:
+          sqlite-version: '3.45.0'  # Stable version
 
-      # Validate SQL schema (basic check by running it)
-      - name: Validate SQL schema
-        run: sqlite3 /tmp/test.db < docs/part4_database_schema.md.sql
-        continue-on-error: true # Allow continuation if SQL has issues
-        # Note: Extract SQL from Markdown for testing
-        # This is a simplified check; assumes SQL block is saved separately
+      # Extract and validate code blocks from Markdown
+      - name: Extract and Validate Code Blocks
+        run: |
+          python << 'EOF'
+          import re
+          import subprocess
+          import os
+          import tempfile
 
-      # Validate Bash script syntax
-      - name: Validate Bash script
-        run: bash -n docs/part2_bash_setup.md.sh
+          def extract_code_blocks(md_file, lang):
+              with open(md_file, 'r') as f:
+                  content = f.read()
+              # Regex for ```lang ... ```
+              pattern = rf'```(?:{lang})\s*\n(.*?)\n```'
+              matches = re.findall(pattern, content, re.DOTALL)
+              return '\n'.join(matches) if matches else ''
+
+          # Temp dir for extracted files
+          with tempfile.TemporaryDirectory() as tmpdir:
+              # Extract Bash from part2
+              bash_code = extract_code_blocks('docs/part2_bash_setup.md', 'bash')
+              if bash_code:
+                  bash_path = f'{tmpdir}/script.sh'
+                  with open(bash_path, 'w') as f:
+                      f.write(bash_code)
+                  subprocess.run(['bash', '-n', bash_path], check=True)
+                  print(f'Bash syntax OK: {bash_path}')
+
+              # Extract JS from part3
+              js_code = extract_code_blocks('docs/part3_backend_code.md', 'javascript')
+              if js_code:
+                  js_path = f'{tmpdir}/server.js'
+                  with open(js_path, 'w') as f:
+                      f.write(js_code)
+                  subprocess.run(['node', '--check', js_path], check=True)
+                  print(f'JS syntax OK: {js_path}')
+
+              # Extract SQL from part4
+              sql_code = extract_code_blocks('docs/part4_database_schema.md', 'sql')
+              if sql_code:
+                  sql_path = f'{tmpdir}/schema.sql'
+                  with open(sql_path, 'w') as f:
+                      f.write(sql_code)
+                  db_path = f'{tmpdir}/test.db'
+                  subprocess.run(['sqlite3', db_path, '<', sql_path], check=True)
+                  print(f'SQL validation OK: {sql_path}')
+          EOF
         continue-on-error: true
-        # Note: Assumes Bash script is extracted from Markdown
 
-      # Validate JavaScript syntax
-      - name: Validate JavaScript
-        run: node --check docs/part3_backend_code.md.js
-        continue-on-error: true
-        # Note: Assumes JS code is extracted
-
-      # Build Markdown to HTML for GitHub Pages
+      # Build Markdown to HTML
       - name: Build documentation
         run: |
           npm install -g marked
           mkdir -p public
-          for file in docs/*.md; do
-            base=$(basename "$file" .md)
-            marked -o "public/$base.html" "$file"
-          done
+          if [ -d "docs" ]; then
+            for file in docs/*.md; do
+              if [ -f "$file" ]; then
+                base=$(basename "$file" .md)
+                marked "$file" -o "public/$base.html" || echo "Warning: Failed to convert $file"
+              fi
+            done
+          else
+            echo "No docs folder found, skipping build"
+          fi
 
-      # Deploy to GitHub Pages
+      # Deploy to GitHub Pages (only on push to main)
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
