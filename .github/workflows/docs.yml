@@ -1,0 +1,83 @@
+```yaml
+name: Documentation CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js for markdownlint and other tools
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Install markdownlint-cli for linting Markdown files
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli
+
+      # Lint Markdown files in the docs/ folder
+      - name: Lint Markdown files
+        run: markdownlint 'docs/*.md'
+        continue-on-error: true # Allow workflow to continue even if linting finds issues
+
+      # Set up Python for checking SQL syntax (basic validation)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Install SQLite for validating SQL syntax
+      - name: Install SQLite
+        run: sudo apt-get install -y sqlite3
+
+      # Validate SQL schema (basic check by running it)
+      - name: Validate SQL schema
+        run: sqlite3 /tmp/test.db < docs/part4_database_schema.md.sql
+        continue-on-error: true # Allow continuation if SQL has issues
+        # Note: Extract SQL from Markdown for testing
+        # This is a simplified check; assumes SQL block is saved separately
+
+      # Validate Bash script syntax
+      - name: Validate Bash script
+        run: bash -n docs/part2_bash_setup.md.sh
+        continue-on-error: true
+        # Note: Assumes Bash script is extracted from Markdown
+
+      # Validate JavaScript syntax
+      - name: Validate JavaScript
+        run: node --check docs/part3_backend_code.md.js
+        continue-on-error: true
+        # Note: Assumes JS code is extracted
+
+      # Build Markdown to HTML for GitHub Pages
+      - name: Build documentation
+        run: |
+          npm install -g marked
+          mkdir -p public
+          for file in docs/*.md; do
+            base=$(basename "$file" .md)
+            marked -o "public/$base.html" "$file"
+          done
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+```
