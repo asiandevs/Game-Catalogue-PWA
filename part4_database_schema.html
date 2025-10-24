@@ -1,0 +1,63 @@
+<h1>Part 4: Database Schema (schema.sql)</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It defines the SQLite database schema for the game catalogue. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
+<h2>Understanding SQL Statements</h2>
+<p>The schema defines tables, keys, and sample data. Run with:<br><code>sqlite3 games.db &lt; schema.sql</code></p>
+<pre><code class="language-sql">CREATE TABLE genres (
+    genre_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE platforms (
+    platform_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE games (
+    game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    genre_id INTEGER,
+    platform_id INTEGER,
+    publisher TEXT,
+    release_year INTEGER CHECK (release_year &gt; 1900),
+    rating REAL CHECK (rating BETWEEN 0 AND 10),
+    price REAL CHECK (price &gt;= 0),
+    description TEXT,
+    image_url TEXT,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id) ON DELETE SET NULL,
+    FOREIGN KEY (platform_id) REFERENCES platforms(platform_id) ON DELETE SET NULL
+);
+
+-- Indexes for performance
+CREATE INDEX idx_games_title ON games(title);
+CREATE INDEX idx_games_genre ON games(genre_id);
+
+-- Sample data
+INSERT INTO genres (name) VALUES (&#39;Action&#39;), (&#39;RPG&#39;), (&#39;Strategy&#39;), (&#39;Adventure&#39;), (&#39;Simulation&#39;), (&#39;Sports&#39;), (&#39;Puzzle&#39;), (&#39;Horror&#39;), (&#39;Fighting&#39;), (&#39;Racing&#39;);
+INSERT INTO platforms (name) VALUES (&#39;PC&#39;), (&#39;PlayStation&#39;), (&#39;Xbox&#39;), (&#39;Nintendo Switch&#39;), (&#39;Mobile&#39;), (&#39;VR&#39;), (&#39;Arcade&#39;), (&#39;Retro&#39;);
+
+-- Insert 10 games
+INSERT INTO games (title, genre_id, platform_id, publisher, release_year, rating, price, description, image_url) VALUES 
+(&#39;The Legend of Zelda&#39;, 2, 4, &#39;Nintendo&#39;, 2017, 9.5, 59.99, &#39;Epic adventure game.&#39;, &#39;zelda.jpg&#39;),
+(&#39;Cyberpunk 2077&#39;, 2, 1, &#39;CD Projekt&#39;, 2020, 7.8, 49.99, &#39;Open-world RPG.&#39;, &#39;cyberpunk.jpg&#39;),
+(&#39;FIFA 23&#39;, 6, 2, &#39;EA Sports&#39;, 2022, 8.0, 69.99, &#39;Soccer simulation.&#39;, &#39;fifa.jpg&#39;),
+(&#39;Tetris&#39;, 7, 5, &#39;Tetris Holding&#39;, 1984, 9.0, 4.99, &#39;Classic puzzle game.&#39;, &#39;tetris.jpg&#39;),
+(&#39;God of War&#39;, 1, 2, &#39;Sony&#39;, 2018, 9.4, 39.99, &#39;Action-adventure epic.&#39;, &#39;gow.jpg&#39;),
+(&#39;SimCity&#39;, 5, 1, &#39;Maxis&#39;, 2013, 7.5, 29.99, &#39;City-building simulation.&#39;, &#39;simcity.jpg&#39;),
+(&#39;Street Fighter V&#39;, 9, 2, &#39;Capcom&#39;, 2016, 8.2, 29.99, &#39;Competitive fighting.&#39;, &#39;sfv.jpg&#39;),
+(&#39;Hollow Knight&#39;, 4, 4, &#39;Team Cherry&#39;, 2017, 9.3, 14.99, &#39;Metroidvania adventure.&#39;, &#39;hollow.jpg&#39;),
+(&#39;Forza Horizon 5&#39;, 10, 3, &#39;Playground Games&#39;, 2021, 9.1, 59.99, &#39;Open-world racing.&#39;, &#39;forza.jpg&#39;),
+(&#39;Resident Evil 4&#39;, 8, 2, &#39;Capcom&#39;, 2023, 9.2, 59.99, &#39;Survival horror.&#39;, &#39;re4.jpg&#39;);
+</code></pre>
+<p><strong>Annotation:</strong> <code>CREATE TABLE</code> defines structure. <code>CHECK</code> constraints validate data. <code>AUTOINCREMENT</code> auto-generates IDs.</p>
+<h2>Primary &amp; Foreign Keys Explained</h2>
+<ul>
+<li><strong>Primary Key</strong> (e.g., <code>game_id</code>): Unique identifier, ensures no duplicates</li>
+<li><strong>Foreign Key</strong> (e.g., <code>genre_id</code>): Links tables, enforces referential integrity</li>
+</ul>
+<p><strong>Annotation:</strong> Keys normalize data, reducing redundancy. <code>ON DELETE SET NULL</code> prevents orphan records.</p>
+<h2>Inserting Data and Indexing for Performance</h2>
+<ul>
+<li><code>INSERT INTO</code> adds rows</li>
+<li>Indexes (<code>CREATE INDEX</code>) speed up queries on common fields like title</li>
+</ul>
+<p><strong>Annotation:</strong> Sample data (10 genres, 8 platforms, 10 games) jumpstarts testing. Indexes are crucial for large datasets.</p>
