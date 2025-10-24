@@ -1,6 +1,6 @@
 # Part 3: Backend Code (server.js)
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the backend setup using Node.js and Express to serve API endpoints and static files. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the backend setup using Node.js and Express to serve API endpoints and static files. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)](../).
 
 ## Express.js and SQLite Integration
 
