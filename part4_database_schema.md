@@ -1,6 +1,6 @@
 # Part 4: Database Schema (schema.sql)
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It defines the SQLite database schema for the game catalogue. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It defines the SQLite database schema for the game catalogue. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)].
 
 ## Understanding SQL Statements
 
