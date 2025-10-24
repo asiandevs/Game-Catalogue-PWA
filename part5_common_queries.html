@@ -1,0 +1,66 @@
+<h1>Part 5: Common Queries (queries.sql)</h1>
+<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It provides sample SQL queries for the game catalogue database. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
+<h2>Detailed Explanation of 15 Sample Queries</h2>
+<p>Create <code>database/queries.sql</code> with these for reference. They cover CRUD and advanced operations.</p>
+<pre><code class="language-sql">-- 1. All Games
+SELECT * FROM games;
+
+-- 2. Games by Genre
+SELECT games.*, genres.name AS genre FROM games JOIN genres ON games.genre_id = genres.genre_id WHERE genres.name = &#39;Action&#39;;
+
+-- 3. Games by Platform
+SELECT games.*, platforms.name AS platform FROM games JOIN platforms ON games.platform_id = platforms.platform_id WHERE platforms.name = &#39;PC&#39;;
+
+-- 4. Top Rated Games
+SELECT * FROM games ORDER BY rating DESC LIMIT 5;
+
+-- 5. Search by Title
+SELECT * FROM games WHERE title LIKE &#39;%Zelda%&#39;;
+
+-- 6. Average Rating
+SELECT AVG(rating) AS avg_rating FROM games;
+
+-- 7. Count by Genre
+SELECT genres.name, COUNT(*) AS game_count FROM games JOIN genres ON games.genre_id = genres.genre_id GROUP BY genres.name;
+
+-- 8. Games Released After Year
+SELECT * FROM games WHERE release_year &gt; 2020;
+
+-- 9. Update Rating
+UPDATE games SET rating = 9.0 WHERE game_id = 1;
+
+-- 10. Delete Game
+DELETE FROM games WHERE game_id = 1;
+
+-- 11. Insert New Game
+INSERT INTO games (title, genre_id, platform_id, publisher, release_year, rating, price, description, image_url) 
+VALUES (&#39;New Game&#39;, 1, 1, &#39;Indie&#39;, 2025, 8.5, 19.99, &#39;New title.&#39;, &#39;newgame.jpg&#39;);
+
+-- 12. Join All Tables
+SELECT games.title, genres.name AS genre, platforms.name AS platform 
+FROM games 
+JOIN genres ON games.genre_id = genres.genre_id 
+JOIN platforms ON games.platform_id = platforms.platform_id;
+
+-- 13. Min/Max Price
+SELECT MIN(price) AS min_price, MAX(price) AS max_price FROM games;
+
+-- 14. Games with Images
+SELECT * FROM games WHERE image_url IS NOT NULL;
+
+-- 15. Complex Filter
+SELECT * FROM games WHERE rating &gt; 8 AND price &lt; 50 ORDER BY release_year DESC;
+</code></pre>
+<h2>Filtering, Joining, Searching, and Updating Data</h2>
+<ul>
+<li><strong>Filtering:</strong> WHERE clause narrows results</li>
+<li><strong>Joining:</strong> Combines related data across tables</li>
+<li><strong>Searching:</strong> LIKE for pattern matching</li>
+<li><strong>Updating:</strong> SET with WHERE modifies data</li>
+</ul>
+<p><strong>Annotation:</strong> Test queries in SQLite shell. Use prepared statements in code to prevent SQL injection.</p>
+<ul>
+<li>Maintained all original SQL content and structure</li>
+<li>Ensured annotations are properly formatted</li>
+<li>Made the query descriptions more scannable with clear categories</li>
+</ul>
