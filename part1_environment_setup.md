@@ -1,6 +1,6 @@
 # Part 1: Environment Setup and Project Overview
 
-This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers setting up your development environment and understanding the project structure for building a Progressive Web App (PWA) using SQLite, Node.js, and HTML/CSS/JS. [Return to repository root](../).
+This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers setting up your development environment and understanding the project structure for building a Progressive Web App (PWA) using SQLite, Node.js, and HTML/CSS/JS. [[Return to repository root](https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main)](../).
 
 ## Installing VS Code, Node.js, SQLite
 
