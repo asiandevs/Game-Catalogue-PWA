@@ -1,60 +1,173 @@
-<h1>Part 1: Environment Setup and Project Overview</h1>
-<p>This file is part of the <strong>Full-Stack Annotated Study Guide: Game Catalogue PWA</strong><br>repo. It covers setting up your dev environment and understanding the project<br>structure for a Progressive Web App (PWA) using SQLite, Node.js, and HTML/CSS/JS.<br>See <a href="../README.md">README.md</a> for the full guide.</p>
-<h2>Installing VS Code, Node.js, SQLite</h2>
-<p>To build the Game Catalogue PWA, set up your development tools on macOS. These form<br>the foundation for coding, running servers, and managing the database.</p>
+<h2>📘 Part 1: Environment Setup and Project Overview</h2>
+<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
+<hr>
+<h3>🧰 1. Overview</h3>
+<p>This project is a <strong>Progressive Web App (PWA)</strong> that catalogs video games.
+It combines multiple technologies to teach students <strong>full-stack web development</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Frontend</td>
+<td>HTML, CSS, JavaScript</td>
+<td>Builds the user interface</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Node.js + Express</td>
+<td>Handles API requests</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>SQLite3</td>
+<td>Stores games, genres, and platforms</td>
+</tr>
+<tr>
+<td>Tooling</td>
+<td>Bash + VS Code + Git</td>
+<td>Automates setup and manages source code</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Analogy:</strong>
+Think of the app as a library system:</p>
 <ul>
-<li><p><strong>Install VS Code</strong>:</p>
-<ul>
-<li>Visit <a href="https://code.visualstudio.com">code.visualstudio.com</a>.</li>
-<li>Download the &quot;Mac Universal&quot; version.</li>
-<li>Extract the .zip and drag &quot;Visual Studio Code&quot; to your Applications folder.</li>
-<li>Launch VS Code from Applications.</li>
-<li><em>Annotation</em>: VS Code is a lightweight, extensible code editor ideal for<br>full-stack development. It supports extensions for syntax highlighting,<br>debugging, and live previews, making it perfect for HTML/CSS/JS and Node.js.</li>
+<li><strong>Frontend</strong> = the library counter where users search for books (games).</li>
+<li><strong>Backend</strong> = the librarian who fetches and manages data.</li>
+<li><strong>Database</strong> = the shelves storing all books.</li>
 </ul>
-</li>
-<li><p><strong>Install Node.js</strong>:</p>
-<ul>
-<li>Go to <a href="https://nodejs.org">nodejs.org</a>.</li>
-<li>Download the LTS version for stability.</li>
-<li>Open the .pkg file and follow the installer prompts, entering your admin<br>password as needed.</li>
-<li>Verify in Terminal: <code>node --version</code> (e.g., v20.x.x) and <code>npm --version</code>.</li>
-<li><em>Annotation</em>: Node.js enables server-side JavaScript, crucial for the backend.<br>NPM (Node Package Manager) handles dependencies like Express. LTS ensures<br>compatibility and security updates.</li>
-</ul>
-</li>
-<li><p><strong>Install SQLite3</strong>:</p>
-<ul>
-<li>SQLite3 is pre-installed on macOS. Verify with <code>sqlite3 --version</code> in Terminal.</li>
-<li>If missing (rare), install via Homebrew: <code>brew install sqlite</code>.</li>
-<li><em>Annotation</em>: SQLite is a lightweight, file-based relational database. It&#39;s<br>serverless, ideal for PWAs needing data persistence without a full DBMS like<br>MySQL. Here, it stores game data locally.</li>
-</ul>
-</li>
-</ul>
-<h2>Understanding Folder Structure and Workflow</h2>
-<p>The project uses a structured folder layout created via a Bash script (Part 2).<br>Key folders include:</p>
-<ul>
-<li><code>css/</code> for stylesheets.</li>
-<li><code>js/</code> for JavaScript logic.</li>
-<li><code>images/</code> for assets.</li>
-<li><code>database/</code> for SQLite files (e.g., games.db, schema.sql, queries.sql).</li>
-<li>Root files: index.html (home), catalogue.html, about.html, manifest.json (PWA<br>config), service-worker.js (offline support).</li>
-<li><code>docs/</code> for documentation.</li>
-</ul>
-<p><strong>Workflow</strong>:</p>
+<hr>
+<h3>🧑‍💻 2. Installing Development Tools (macOS example)</h3>
+<h4>🔹 Step 1 – Install VS Code</h4>
+<p>Visit 👉 <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>
+Download <strong>Mac Universal</strong> → unzip → move <strong>Visual Studio Code.app</strong> to <code>/Applications</code>.</p>
+<p>💡 <strong>Tip:</strong>
+VS Code is your “command center” — you’ll edit, run, and debug all code here.</p>
+<hr>
+<h4>🔹 Step 2 – Install Node.js</h4>
+<p>Visit 👉 <a href="https://nodejs.org/">https://nodejs.org/</a>
+Download the <strong>LTS (Long Term Support)</strong> version and run the <code>.pkg</code> installer.</p>
+<p>Verify installation:</p>
+<pre><code class="language-bash">node --version   # Should print something like v20.x.x
+npm --version    # npm comes bundled with Node.js
+</code></pre>
+<p>💡 <strong>Note:</strong>
+<code>node</code> runs JavaScript outside the browser.
+<code>npm</code> (Node Package Manager) installs project dependencies (like Express or SQLite).</p>
+<hr>
+<h4>🔹 Step 3 – Verify SQLite3</h4>
+<p>SQLite is pre-installed on macOS. Check version:</p>
+<pre><code class="language-bash">sqlite3 --version   # Outputs the SQLite version number
+</code></pre>
+<p>⚙️ <strong>If missing:</strong>
+Install using Homebrew → <code>brew install sqlite3</code></p>
+<p>💡 <strong>Tip:</strong>
+SQLite is a lightweight, file-based database — perfect for prototypes or local apps.
+All data lives in one file (e.g., <code>games.db</code>).</p>
+<hr>
+<h4>🔹 Step 4 – Install VS Code Extensions</h4>
+<p>Open VS Code → click <strong>Extensions</strong> icon or press <code>Cmd + Shift + X</code>.
+Install the following:</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SQLite</code> by alexcvzz</td>
+<td>Browse and query <code>.db</code> files visually</td>
+</tr>
+<tr>
+<td><code>Live Server</code> by Ritwick Dey</td>
+<td>Preview HTML files instantly</td>
+</tr>
+<tr>
+<td><code>ESLint</code> by Microsoft</td>
+<td>Linting and syntax checking for JS</td>
+</tr>
+<tr>
+<td><code>Prettier – Code Formatter</code></td>
+<td>Automatically format code</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Best Practice:</strong>
+After installing, reload VS Code to activate them.</p>
+<hr>
+<h4>🔹 Step 5 – Install Git</h4>
+<p>Git tracks your code changes — essential for version control and GitHub uploads.</p>
+<pre><code class="language-bash">git --version
+# If missing:
+# brew install git
+</code></pre>
+<p>Then configure your identity:</p>
+<pre><code class="language-bash">git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;you@example.com&quot;
+</code></pre>
+<p>💡 <strong>Tip:</strong>
+You’ll later push this project to a GitHub repository for collaboration or submission.</p>
+<hr>
+<h3>🗂️ 3. Understanding Project Folder Structure</h3>
+<p>Once the setup script runs (next part), your folder tree will look like this:</p>
+<pre><code>game-catalogue-pwa/
+│
+├── css/                  # Stylesheets (look &amp; feel)
+│   ├── style.css
+│   └── responsive.css
+│
+├── js/                   # Frontend JavaScript
+│   ├── app.js
+│   ├── database.js
+│   └── ui.js
+│
+├── database/             # SQLite database and SQL files
+│   ├── games.db
+│   ├── schema.sql
+│   └── queries.sql
+│
+├── icons/                # App icons for manifest
+├── images/               # Game cover images
+│
+├── documentation/        # Assignment docs (diary, charts, etc.)
+│
+├── index.html            # Home page
+├── catalogue.html        # Game list page
+├── about.html            # About page
+│
+├── manifest.json         # PWA metadata
+├── service-worker.js     # Offline caching logic
+│
+├── server.js             # Node.js backend
+├── package.json          # Project dependencies
+├── setup-project.sh      # Automation script
+└── README.md             # Documentation (this guide)
+</code></pre>
+<p>💡 <strong>Note:</strong>
+This structure keeps each layer separate — styling, logic, data, and documentation — which is a core best practice in software engineering.</p>
+<hr>
+<h3>🔗 4. Workflow Overview</h3>
 <ol>
-<li>Set up environment and folders.</li>
-<li>Initialize database with schema and sample data.</li>
-<li>Build backend server to expose API endpoints.</li>
-<li>Develop frontend pages with HTML/CSS/JS, fetching data via API.</li>
-<li>Add PWA features for offline access.</li>
-<li>Test with Live Server or direct browser opening.</li>
+<li><strong>Run the Bash script</strong> to create the folder skeleton.</li>
+<li><strong>Install dependencies</strong> (<code>npm install</code>) using <code>package.json</code>.</li>
+<li><strong>Initialize SQLite database</strong> by executing <code>schema.sql</code>.</li>
+<li><strong>Start the backend server</strong> (<code>node server.js</code>).</li>
+<li><strong>Serve and test the app</strong> with <strong>Live Server</strong> (frontend) or by hitting the API endpoint at <code>http://localhost:3000/api/games</code>.</li>
 </ol>
-<p><em>Annotation</em>: This structure separates concerns (MVC-like: Model=DB, View=HTML/CSS,<br>Controller=JS/Node). Workflow emphasizes automation (scripting) and iteration (edit<br>in VS Code, preview with Live Server).</p>
-<h2>Overview of Project Goals (Backend + Frontend + Database)</h2>
-<p>The goal is a responsive PWA for browsing a game catalogue, with features like<br>searching, filtering, and offline viewing.</p>
+<p>💡 <strong>Analogy:</strong>
+Imagine building a house:</p>
 <ul>
-<li><strong>Database (SQLite)</strong>: Stores game data (titles, genres, platforms, etc.).</li>
-<li><strong>Backend (Node.js + Express)</strong>: Serves API endpoints to query the DB, handles<br>static files (HTML/CSS/JS).</li>
-<li><strong>Frontend (HTML/CSS/JS)</strong>: Renders pages, fetches data via fetch API, updates UI<br>dynamically.</li>
-<li><strong>Integration</strong>: Frontend calls backend APIs (e.g., /api/games), which query<br>SQLite and return JSON. PWA elements (manifest, service worker) enable<br>installation and caching for offline use.</li>
+<li>Bash script = lays the foundation (folders &amp; files)</li>
+<li>SQLite schema = builds the rooms (tables &amp; data)</li>
+<li>Node.js backend = installs the wiring (logic &amp; data flow)</li>
+<li>HTML/CSS/JS = paints and furnishes the house (UI/UX)</li>
 </ul>
-<p><em>Annotation</em>: This full-stack approach teaches data flow in web apps. It&#39;s<br>scalable—start local, deploy to hosting like Heroku.</p>
+<hr>
+<h3>✅ 5. Next Steps</h3>
+<p>In <strong>Part 2</strong>, you’ll learn how the Bash automation script works (<code>setup-project.sh</code>) —
+how each command creates your project’s foundation automatically.</p>
+<hr>

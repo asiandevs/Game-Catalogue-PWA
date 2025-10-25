@@ -1,12 +1,178 @@
-<h1>Game Catalogue PWA Study Guide</h1>
-<p>A full-stack guide for building a game catalogue PWA. See the docs folder for details:</p>
+<h1>🎮 Game Catalogue PWA – Full-Stack Annotated Study Guide</h1>
+<p><em>A complete beginner-friendly walkthrough of a Progressive Web App built with Node.js, SQLite, HTML, CSS, and JavaScript.</em></p>
+<hr>
+<h2>📘 Overview</h2>
+<p>This repository provides a <strong>step-by-step educational project</strong> to help newcomers learn <strong>full-stack web development</strong> using real-world tools and best practices.</p>
+<p>You’ll learn how to:
+✅ Automate setup using Bash scripts
+✅ Build a backend API using Node.js and Express
+✅ Design and populate an SQLite database
+✅ Create a responsive frontend with HTML, CSS, and JS
+✅ Enable offline capabilities with a Progressive Web App (PWA)</p>
+<hr>
+<h2>🧭 Project Structure</h2>
+<pre><code>game-catalogue-pwa/
+│
+├── css/                # Styling (layout, colors, responsiveness)
+├── js/                 # Frontend logic and API integration
+├── database/           # SQLite database and SQL scripts
+├── documentation/      # Annotated learning guide parts
+├── server.js           # Express + SQLite backend
+├── package.json        # Node.js dependencies and scripts
+├── setup-project.sh    # Bash script to create project scaffold
+├── manifest.json       # PWA configuration
+├── service-worker.js   # Offline caching logic
+├── index.html          # Home page
+├── catalogue.html      # Game listing page
+├── about.html          # About/project info
+└── README.md           # (You are here!)
+</code></pre>
+<hr>
+<h2>🧩 Learning Path</h2>
+<p>This project is divided into <strong>8 detailed parts</strong>, each designed to build your knowledge gradually.
+All files are located under <code>/docs/</code> or can be read directly on GitHub.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="docs/Part1_Setup.md"><strong>Part 1 – Environment Setup &amp; Overview</strong></a></td>
+<td>Tool installation and folder structure</td>
+<td>Learn to install Node.js, SQLite, VS Code, and Git</td>
+</tr>
+<tr>
+<td><a href="docs/Part2_Bash_Setup.md"><strong>Part 2 – Bash Project Setup Script</strong></a></td>
+<td>Automating setup</td>
+<td>Understand how the script scaffolds the project automatically</td>
+</tr>
+<tr>
+<td><a href="docs/Part3_Backend.md"><strong>Part 3 – Backend Code (<code>server.js</code>)</strong></a></td>
+<td>Node.js + Express + SQLite integration</td>
+<td>Learn how to serve APIs and connect to the database</td>
+</tr>
+<tr>
+<td><a href="docs/Part4_Database_Schema.md"><strong>Part 4 – Database Schema (<code>schema.sql</code>)</strong></a></td>
+<td>Database design</td>
+<td>Learn how to structure data and relationships in SQL</td>
+</tr>
+<tr>
+<td><a href="docs/Part5_Queries.md"><strong>Part 5 – Common Queries (<code>queries.sql</code>)</strong></a></td>
+<td>Data operations</td>
+<td>Retrieve, filter, and update data with SQL</td>
+</tr>
+<tr>
+<td><a href="docs/Part6_SQLite_Operations.md"><strong>Part 6 – SQLite Operations &amp; Verification</strong></a></td>
+<td>Testing and debugging</td>
+<td>Learn to open, inspect, and verify your database</td>
+</tr>
+<tr>
+<td><a href="docs/Part7_Frontend.md"><strong>Part 7 – Frontend (HTML, CSS, JS Overview)</strong></a></td>
+<td>User interface</td>
+<td>Build responsive and dynamic UI that fetches live data</td>
+</tr>
+<tr>
+<td><a href="docs/Part8_Integration.md"><strong>Part 8 – How It All Works Together</strong></a></td>
+<td>End-to-end integration</td>
+<td>Understand app architecture, PWA features, and deployment</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>⚙️ Quick Start</h2>
+<h3>1️⃣ Clone the repository</h3>
+<pre><code class="language-bash">git clone https://github.com/&lt;your-username&gt;/game-catalogue-pwa.git
+cd game-catalogue-pwa
+</code></pre>
+<h3>2️⃣ Run setup script</h3>
+<pre><code class="language-bash">chmod +x setup-project.sh
+./setup-project.sh
+</code></pre>
+<h3>3️⃣ Install dependencies</h3>
+<pre><code class="language-bash">npm install
+</code></pre>
+<h3>4️⃣ Initialize the database</h3>
+<pre><code class="language-bash">cd database
+sqlite3 games.db &lt; schema.sql
+</code></pre>
+<h3>5️⃣ Run the backend</h3>
+<pre><code class="language-bash">cd ..
+node server.js
+</code></pre>
+<p>Backend runs at → <a href="http://localhost:3000">http://localhost:3000</a></p>
+<hr>
+<h2>💻 Live Preview (Frontend)</h2>
+<p>Use VS Code’s <strong>Live Server</strong> extension to open:</p>
+<pre><code>index.html
+</code></pre>
+<p>Your web app will connect to the local API and display all game data dynamically.</p>
+<hr>
+<h2>📱 Progressive Web App Features</h2>
+<p>✅ Works offline via Service Worker
+✅ Installable on desktop/mobile
+✅ Uses a lightweight SQLite database
+✅ Fast and responsive UI built with pure JS</p>
+<p>💡 <strong>Try installing it:</strong></p>
 <ul>
-<li><a href="docs/part1_environment_setup.md">Part 1: Environment Setup</a></li>
-<li><a href="docs/part2_bash_setup.md">Part 2: Bash Setup</a></li>
-<li><a href="docs/part3_backend_code.md">Part 3: Backend Code</a></li>
-<li><a href="docs/part4_database_schema.md">Part 4: Database Schema</a></li>
-<li><a href="docs/part5_common_queries.md">Part 5: Common Queries</a></li>
-<li><a href="docs/part6_sqlite_operations.md">Part 6: SQLite Operations</a></li>
-<li><a href="docs/part7_frontend_overview.md">Part 7: Frontend Overview</a></li>
-<li><a href="docs/part8_integration.md">Part 8: Integration</a></li>
+<li>In Chrome → Click the “Install App” icon in the address bar.</li>
+<li>Your Game Catalogue will appear like a native app.</li>
 </ul>
+<hr>
+<h2>🧠 Skills You’ll Practice</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Frontend</strong></td>
+<td>HTML5, CSS3 Grid, JavaScript (ES6), DOM manipulation</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Node.js, Express.js, REST APIs</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>SQLite, SQL queries, schema design</td>
+</tr>
+<tr>
+<td><strong>DevOps Basics</strong></td>
+<td>Bash scripting, environment setup, Git</td>
+</tr>
+<tr>
+<td><strong>PWA Concepts</strong></td>
+<td>Service workers, caching, manifest.json</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>🧩 Suggested Extensions</h2>
+<p>For the best experience, install these in VS Code:</p>
+<ul>
+<li>🧱 <strong>Live Server</strong> – Preview HTML instantly</li>
+<li>🧩 <strong>SQLite Viewer</strong> – Browse database visually</li>
+<li>⚙️ <strong>Prettier</strong> – Auto-format your code</li>
+<li>🔍 <strong>ESLint</strong> – Check for JS syntax issues</li>
+</ul>
+<hr>
+<h2>🏁 Conclusion</h2>
+<p>By completing all 8 parts, you’ll have built a <strong>fully functional Progressive Web App</strong> that demonstrates:</p>
+<ul>
+<li>Real-world full-stack architecture</li>
+<li>Clean separation of concerns</li>
+<li>Hands-on coding with modern web technologies</li>
+</ul>
+<p>You can now proudly use this repository as:</p>
+<ul>
+<li>A <strong>portfolio project</strong></li>
+<li>A <strong>teaching aid</strong></li>
+<li>Or a <strong>starter template</strong> for future apps</li>
+</ul>
+<hr>
+<p><strong>Next Step:</strong>
+👉 Explore <code>/docs/Part1_Setup.md</code> to begin your learning journey.</p>
+<hr>

@@ -1,111 +1,282 @@
-<h1>Part 7: Frontend (HTML, CSS, JS Overview)</h1>
-<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It covers the frontend structure for the game catalogue PWA. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
-<h2>Structure of the Main Pages (Home, Catalogue, About)</h2>
-<h3>index.html (Home):</h3>
+<h2>🧱 Part 7 – Frontend (HTML, CSS, JS Overview)</h2>
+<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
+<hr>
+<h3>🎯 Goal</h3>
+<p>Understand how your <strong>frontend</strong> (HTML, CSS, and JavaScript) connects to the backend and database.
+This section explains each file’s role and shows <strong>annotated examples</strong> of structure, styling, and interactivity.</p>
+<p>💡 <strong>Analogy:</strong>
+If your backend is the <em>engine</em> of a car, then your frontend is the <em>dashboard and bodywork</em> — it’s what users touch, see, and drive.</p>
+<hr>
+<h3>🗂️ 1. File Overview</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>index.html</code></td>
+<td>Landing page (home)</td>
+</tr>
+<tr>
+<td><code>catalogue.html</code></td>
+<td>Lists all games from database</td>
+</tr>
+<tr>
+<td><code>about.html</code></td>
+<td>Static information page</td>
+</tr>
+<tr>
+<td><code>/css/style.css</code></td>
+<td>Base styling, layout, typography</td>
+</tr>
+<tr>
+<td><code>/css/responsive.css</code></td>
+<td>Mobile-friendly adjustments</td>
+</tr>
+<tr>
+<td><code>/js/app.js</code></td>
+<td>Registers service worker &amp; app logic</td>
+</tr>
+<tr>
+<td><code>/js/database.js</code></td>
+<td>Fetches data from backend (API calls)</td>
+</tr>
+<tr>
+<td><code>/js/ui.js</code></td>
+<td>Builds dynamic HTML components (tables, cards)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>🧩 2. HTML Structure</h2>
+<p>Below is a simplified, <strong>annotated</strong> <code>catalogue.html</code> file.</p>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;Game Catalogue&lt;/title&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
-    &lt;link rel=&quot;manifest&quot; href=&quot;manifest.json&quot;&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+  &lt;title&gt;Game Catalogue&lt;/title&gt;
+
+  &lt;!-- Link to external styles --&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot; /&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/responsive.css&quot; /&gt;
+
+  &lt;!-- PWA manifest &amp; icons --&gt;
+  &lt;link rel=&quot;manifest&quot; href=&quot;manifest.json&quot; /&gt;
 &lt;/head&gt;
 &lt;body&gt;
+
+  &lt;!-- Header --&gt;
+  &lt;header&gt;
+    &lt;h1&gt; Game Catalogue&lt;/h1&gt;
     &lt;nav&gt;
-        &lt;a href=&quot;index.html&quot;&gt;Home&lt;/a&gt;
-        &lt;a href=&quot;catalogue.html&quot;&gt;Catalogue&lt;/a&gt;
-        &lt;a href=&quot;about.html&quot;&gt;About&lt;/a&gt;
+      &lt;a href=&quot;index.html&quot;&gt;Home&lt;/a&gt;
+      &lt;a href=&quot;catalogue.html&quot; class=&quot;active&quot;&gt;Catalogue&lt;/a&gt;
+      &lt;a href=&quot;about.html&quot;&gt;About&lt;/a&gt;
     &lt;/nav&gt;
-    &lt;header&gt;
-        &lt;h1&gt;Welcome to Game Catalogue&lt;/h1&gt;
-    &lt;/header&gt;
-    &lt;section id=&quot;features&quot;&gt;
-        &lt;!-- 4 feature cards, e.g., Search, Filter, Offline, Responsive --&gt;
-        &lt;div class=&quot;feature-card&quot;&gt;Search Games&lt;/div&gt;
-        &lt;div class=&quot;feature-card&quot;&gt;Filter by Genre&lt;/div&gt;
-        &lt;div class=&quot;feature-card&quot;&gt;Offline Access&lt;/div&gt;
-        &lt;div class=&quot;feature-card&quot;&gt;Responsive Design&lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;!-- Main content area --&gt;
+  &lt;main&gt;
+    &lt;section id=&quot;game-list&quot;&gt;
+      &lt;!-- JavaScript will populate games dynamically here --&gt;
     &lt;/section&gt;
-    &lt;section id=&quot;stats&quot;&gt;
-        &lt;!-- Stats populated via JS --&gt;
-        &lt;p&gt;Games: &lt;span id=&quot;game-count&quot;&gt;0&lt;/span&gt;&lt;/p&gt;
-    &lt;/section&gt;
-    &lt;footer&gt;© 2025 Game Catalogue&lt;/footer&gt;
-    &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
-    &lt;script&gt;
-        if (&#39;serviceWorker&#39; in navigator) {
-            navigator.serviceWorker.register(&#39;/service-worker.js&#39;);
-        }
-    &lt;/script&gt;
+  &lt;/main&gt;
+
+  &lt;!-- Footer --&gt;
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2025 Game Catalogue PWA&lt;/p&gt;
+  &lt;/footer&gt;
+
+  &lt;!-- Load JavaScript at bottom for better performance --&gt;
+  &lt;script src=&quot;js/database.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;js/ui.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
+<p>💡 <strong>Notes:</strong></p>
 <ul>
-<li><strong>catalogue.html:</strong> Similar structure, with a grid for games (populated via JS fetch)</li>
-<li><strong>about.html:</strong> Static info page with project details</li>
+<li><code>&lt;main&gt;</code> holds the dynamic content.</li>
+<li><code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code> stay consistent across pages.</li>
+<li>JS is loaded at the <strong>bottom</strong> to avoid blocking page rendering.</li>
 </ul>
-<p><strong>Annotation:</strong> HTML5 semantic tags (nav, header, section) improve accessibility. PWA registration in script tag. Viewport meta tag ensures proper mobile rendering.</p>
-<h2>Responsive Design Explained with Annotated CSS Snippets</h2>
-<p>Create <code>css/style.css</code>:</p>
-<pre><code class="language-css">/* Base styles */
+<hr>
+<h2>🎨 3. CSS Basics (<code>style.css</code>)</h2>
+<pre><code class="language-css">/* =====================================================
+    style.css – Base styling for Game Catalogue PWA
+   ===================================================== */
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;  /* light gray background */
+  color: #222;                /* dark text for contrast */
+  margin: 0;
+  padding: 0;
 }
 
-/* Navigation */
-nav {
-    background: #333;
-    color: white;
-    display: flex;
-    justify-content: space-around;
-    padding: 1em;
+header {
+  background: #0d6efd;       /* bootstrap-like blue */
+  color: white;
+  padding: 1rem;
+  text-align: center;
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5em 1em;
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
 }
 
-/* Mobile navigation */
-@media (max-width: 600px) {
-    nav {
-        flex-direction: column;
-        text-align: center;
-    }
-    /* Stack nav on small screens */
+nav a.active {
+  border-bottom: 2px solid white; /* show active page */
 }
 
-/* Feature grid */
-#features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 1em;
+#game-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
 }
 
-.feature-card {
-    background: #f4f4f4;
-    padding: 1.5em;
-    border-radius: 8px;
-    text-align: center;
+.game-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Responsive images */
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Game grid for catalogue */
-.games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
+.game-card h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #0d6efd;
 }
 </code></pre>
+<p>💡 <strong>Tips:</strong></p>
+<ul>
+<li>Use a <strong>CSS grid</strong> for responsive layouts.</li>
+<li>Keep color and spacing consistent across pages.</li>
+<li>The <code>.game-card</code> class is used to display each game fetched from the backend.</li>
+</ul>
+<hr>
+<h2>📱 4. Responsive Design (<code>responsive.css</code>)</h2>
+<pre><code class="language-css">/* =====================================================
+   📱 responsive.css – Mobile &amp; tablet adjustments
+   ===================================================== */
+
+@media (max-width: 768px) {
+  header {
+    text-align: left;
+    padding: 1rem;
+  }
+
+  nav a {
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  #game-list {
+    grid-template-columns: 1fr;  /* single column on mobile */
+  }
+}
+</code></pre>
+<p>💡 <strong>Note:</strong>
+Media queries adapt your layout for smaller screens — this is what makes your PWA mobile-friendly.</p>
+<hr>
+<h2>⚙️ 5. JavaScript Logic</h2>
+<h3>🧩 <code>/js/database.js</code></h3>
+<p>Handles data fetching from the backend API.</p>
+<pre><code class="language-js">// =====================================================
+// ⚙️ database.js – Fetch data from Node.js + SQLite API
+// =====================================================
+
+const API_URL = &#39;/api/games&#39;;
+
+async function fetchGames() {
+  try {
+    const response = await fetch(API_URL);   // Fetch data from Express API
+    const games = await response.json();     // Parse JSON response
+    return games;
+  } catch (error) {
+    console.error(&#39; Error fetching games:&#39;, error);
+    return [];
+  }
+}
+</code></pre>
+<p>💡 <strong>Tip:</strong>
+Always wrap <code>fetch</code> in <code>try/catch</code> to handle network errors gracefully.</p>
+<hr>
+<h3>🧱 <code>/js/ui.js</code></h3>
+<p>Builds HTML cards dynamically using fetched data.</p>
+<pre><code class="language-js">// =====================================================
+//  ui.js – Dynamically build the game list UI
+// =====================================================
+
+async function displayGames() {
+  const container = document.getElementById(&#39;game-list&#39;);
+  const games = await fetchGames();
+
+  if (games.length === 0) {
+    container.innerHTML = &#39;&lt;p&gt;No games found.&lt;/p&gt;&#39;;
+    return;
+  }
+
+  // Create cards for each game
+  container.innerHTML = games.map(game =&gt; `
+    &lt;div class=&quot;game-card&quot;&gt;
+      &lt;h2&gt;${game.title}&lt;/h2&gt;
+      &lt;p&gt;&lt;strong&gt;Developer:&lt;/strong&gt; ${game.developer}&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Platform:&lt;/strong&gt; ${game.platform_id}&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Year:&lt;/strong&gt; ${game.release_year}&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Rating:&lt;/strong&gt;  ${game.rating}&lt;/p&gt;
+    &lt;/div&gt;
+  `).join(&#39;&#39;);
+}
+
+// Initialize UI after page load
+document.addEventListener(&#39;DOMContentLoaded&#39;, displayGames);
+</code></pre>
+<p>💡 <strong>Note:</strong>
+The <code>map()</code> function iterates over all games and converts them into HTML cards — a key modern JavaScript pattern.</p>
+<hr>
+<h3>🚀 <code>/js/app.js</code></h3>
+<p>Registers your PWA’s service worker.</p>
+<pre><code class="language-js">// =====================================================
+// 🚀 app.js – Service Worker registration
+// =====================================================
+
+if (&#39;serviceWorker&#39; in navigator) {
+  window.addEventListener(&#39;load&#39;, () =&gt; {
+    navigator.serviceWorker.register(&#39;/service-worker.js&#39;)
+      .then(reg =&gt; console.log(&#39; Service Worker registered:&#39;, reg.scope))
+      .catch(err =&gt; console.log(&#39; Service Worker failed:&#39;, err));
+  });
+}
+</code></pre>
+<p>💡 <strong>Tip:</strong>
+Service workers enable <strong>offline functionality</strong> and <strong>asset caching</strong>, turning your app into a real PWA.</p>
+<hr>
+<h2>🧠 6. Frontend-Backend Flow Summary</h2>
+<ol>
+<li><code>catalogue.html</code> loads → browser runs <code>ui.js</code></li>
+<li><code>ui.js</code> calls <code>fetchGames()</code> from <code>database.js</code></li>
+<li><code>database.js</code> requests <code>/api/games</code> from <code>server.js</code></li>
+<li><code>server.js</code> queries <code>games.db</code> via SQLite</li>
+<li>JSON results returned → <code>ui.js</code> creates cards in <code>&lt;main&gt;</code></li>
+</ol>
+<p>💡 <strong>Analogy:</strong>
+It’s like ordering food:</p>
+<ul>
+<li><code>ui.js</code> = customer placing the order</li>
+<li><code>database.js</code> = waiter carrying the order</li>
+<li><code>server.js</code> + SQLite = kitchen preparing and serving</li>
+</ul>
+<hr>
+<h2>✅ Outcome</h2>
+<p>You now have:</p>
+<ul>
+<li>A responsive HTML/CSS layout</li>
+<li>Dynamic JavaScript fetching live data</li>
+<li>A connected front-end and back-end</li>
+</ul>

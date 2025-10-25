@@ -1,53 +1,213 @@
-<h1>Part 6: SQLite Operations &amp; Verification</h1>
-<p>This file is part of the Full-Stack Annotated Study Guide: Game Catalogue PWA repository. It explains how to interact with the SQLite database. [<a href="https://github.com/asiandevs/game-catalogue-pwa-guide/tree/main">Return to repository root</a>].</p>
-<h2>How to Create, Open, and Inspect Databases</h2>
-<ol>
-<li><p><strong>Navigate to database folder:</strong></p>
+<h2>Part 6 – SQLite Operations &amp; Verification</h2>
+<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
+<hr>
+<h3>🎯 Goal</h3>
+<p>This section will teach you how to:</p>
+<ul>
+<li>Open your SQLite database manually</li>
+<li>Run and test SQL commands</li>
+<li>Inspect tables, data, and indexes</li>
+<li>Verify your schema and queries work correctly</li>
+</ul>
+<p>💡 <strong>Analogy:</strong>
+Think of the SQLite command-line as your <strong>database control room</strong> —
+you can see all the tables, check their contents, and even repair issues if something breaks.</p>
+<hr>
+<h3>🧰 1. Opening the Database</h3>
+<p>Navigate to your database folder:</p>
 <pre><code class="language-bash">cd game-catalogue-pwa/database
 </code></pre>
-</li>
-<li><p><strong>Create/Run Schema:</strong></p>
-<pre><code class="language-bash">sqlite3 games.db &lt; schema.sql
-</code></pre>
-</li>
-<li><p><strong>Open SQLite Shell:</strong></p>
+<p>Then open SQLite:</p>
 <pre><code class="language-bash">sqlite3 games.db
 </code></pre>
-</li>
-<li><p><strong>Inspect Database:</strong></p>
-<pre><code class="language-sql">.tables                    -- List tables
-.schema games              -- View table structure
-SELECT * FROM games;       -- View data
-SELECT * FROM genres;      -- View genres
-SELECT * FROM platforms;   -- View platforms
+<p>✅ You’ll see a prompt like this:</p>
+<pre><code>SQLite version 3.46.0 2025-10-25
+Enter &quot;.help&quot; for usage hints.
+sqlite&gt;
 </code></pre>
-</li>
-<li><p><strong>Exit Shell:</strong></p>
-<pre><code class="language-sql">.exit
+<p>💡 <strong>Tip:</strong>
+At the <code>sqlite&gt;</code> prompt, you can run SQL statements directly.
+Commands starting with a <code>.</code> (dot) are <strong>SQLite-specific commands</strong>, not SQL.</p>
+<hr>
+<h3>⚙️ 2. Common SQLite Commands</h3>
+<pre><code class="language-bash">.tables             # Lists all tables in the database
+.schema games       # Shows SQL structure of the &#39;games&#39; table
+.headers on         # Display column names when showing results
+.mode column        # Aligns columns neatly for readability
+.exit               # Exits the SQLite CLI
 </code></pre>
-</li>
-</ol>
-<p><strong>Annotation:</strong> The SQLite shell is interactive for testing. File-based DB means no server process—easy for local development.</p>
-<h2>Common Commands and Troubleshooting Tips</h2>
-<h3>Essential SQLite Commands:</h3>
-<pre><code class="language-sql">.headers on                   -- Show column names
-.mode column                  -- Formatted output
-.mode csv                     -- CSV format for export
-.output filename.csv          -- Redirect output to file
-.help                         -- List all commands
-PRAGMA foreign_keys = ON;     -- Enable foreign key constraints
+<p>💡 <strong>Note:</strong>
+Always use <code>.headers on</code> and <code>.mode column</code> for clean output — it makes debugging easier.</p>
+<hr>
+<h3>🔍 3. Viewing Data</h3>
+<pre><code class="language-sql">SELECT * FROM games;
 </code></pre>
-<h3>Troubleshooting:</h3>
+<p>✅ Example output:</p>
+<pre><code>id  title                        release_year  genre_id  platform_id  developer           rating
+--  ----------------------------  ------------  --------  -----------  ------------------  -------
+1   The Witcher 3: Wild Hunt      2015          3         1            CD Projekt Red      9.8
+2   God of War                    2018          1         2            Santa Monica Studio 9.6
+3   Halo Infinite                 2021          1         3            343 Industries      8.4
+4   Animal Crossing: New Horizons 2020          4         4            Nintendo            9.0
+5   FIFA 22                       2021          5         1            EA Sports           7.8
+</code></pre>
+<p>💡 <strong>Tip:</strong>
+If the output looks messy, run these once:</p>
+<pre><code class="language-bash">.mode column
+.headers on
+</code></pre>
+<hr>
+<h3>🧩 4. Inspecting Table Relationships</h3>
+<p>To confirm that your <strong>foreign keys</strong> work properly:</p>
+<pre><code class="language-sql">PRAGMA foreign_key_list(games);
+</code></pre>
+<p>✅ This command shows which columns in <code>games</code> link to other tables:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>seq</th>
+<th>table</th>
+<th>from</th>
+<th>to</th>
+<th>on_update</th>
+<th>on_delete</th>
+<th>match</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>genres</td>
+<td>genre_id</td>
+<td>id</td>
+<td>NO ACTION</td>
+<td>NO ACTION</td>
+<td>NONE</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>platforms</td>
+<td>platform_id</td>
+<td>id</td>
+<td>NO ACTION</td>
+<td>NO ACTION</td>
+<td>NONE</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Pro Tip:</strong>
+If foreign keys aren’t being enforced, enable them manually:</p>
+<pre><code class="language-sql">PRAGMA foreign_keys = ON;
+</code></pre>
+<hr>
+<h3>🧠 5. Validating Query Results</h3>
+<p>Let’s test one of your practical queries from <code>queries.sql</code>.</p>
+<h4>Example – Average Rating by Platform</h4>
+<pre><code class="language-sql">SELECT p.name AS platform, ROUND(AVG(g.rating), 2) AS avg_rating
+FROM games g
+JOIN platforms p ON g.platform_id = p.id
+GROUP BY p.name
+ORDER BY avg_rating DESC;
+</code></pre>
+<p>✅ Expected output:</p>
+<table>
+<thead>
+<tr>
+<th>platform</th>
+<th>avg_rating</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PlayStation</td>
+<td>9.6</td>
+</tr>
+<tr>
+<td>Nintendo Switch</td>
+<td>9.0</td>
+</tr>
+<tr>
+<td>PC</td>
+<td>8.8</td>
+</tr>
+<tr>
+<td>Xbox</td>
+<td>8.4</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Tip:</strong>
+This query checks that your joins and numeric operations are working properly.</p>
+<hr>
+<h3>🧰 6. Importing &amp; Exporting Data</h3>
+<h4>Export to CSV</h4>
+<pre><code class="language-bash">sqlite&gt; .headers on
+sqlite&gt; .mode csv
+sqlite&gt; .output games_export.csv
+sqlite&gt; SELECT * FROM games;
+sqlite&gt; .output stdout
+</code></pre>
+<p>✅ You’ll now have <code>games_export.csv</code> in the same folder — openable in Excel or VS Code.</p>
+<h4>Import from CSV</h4>
+<pre><code class="language-bash">sqlite&gt; .mode csv
+sqlite&gt; .import games_export.csv games
+</code></pre>
+<p>⚙️ <strong>Note:</strong>
+This replaces table content — always back up your database first.</p>
+<hr>
+<h3>🚧 7. Troubleshooting Common Errors</h3>
+<table>
+<thead>
+<tr>
+<th>Error Message</th>
+<th>Meaning</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>no such table: games</code></td>
+<td>You haven’t run <code>schema.sql</code> yet</td>
+<td>Run <code>sqlite3 games.db &lt; schema.sql</code></td>
+</tr>
+<tr>
+<td><code>no such column</code></td>
+<td>You misspelled a column name</td>
+<td>Check <code>.schema table_name</code></td>
+</tr>
+<tr>
+<td><code>database is locked</code></td>
+<td>Another process (e.g. Node.js) is using it</td>
+<td>Close the app or wait, then retry</td>
+</tr>
+<tr>
+<td><code>FOREIGN KEY constraint failed</code></td>
+<td>You tried inserting invalid genre/platform IDs</td>
+<td>Check your reference IDs with <code>SELECT * FROM genres;</code></td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Pro Tip:</strong>
+Always <strong>backup</strong> before modifying data — copy the <code>.db</code> file somewhere safe.</p>
+<hr>
+<h3>🧮 8. Useful Debug Queries</h3>
+<pre><code class="language-sql">-- Count how many records per table
+SELECT &#39;games&#39; AS table_name, COUNT(*) FROM games
+UNION ALL
+SELECT &#39;genres&#39;, COUNT(*) FROM genres
+UNION ALL
+SELECT &#39;platforms&#39;, COUNT(*) FROM platforms;
+
+-- Check distinct developers
+SELECT DISTINCT developer FROM games;
+
+-- See top 3 rated games
+SELECT title, rating FROM games ORDER BY rating DESC LIMIT 3;
+</code></pre>
+<p>💡 These are excellent for sanity checks and debugging logic in your backend.</p>
+<hr>
+<h3>✅ Outcome</h3>
+<p>After completing this section, you can now:</p>
 <ul>
-<li><strong>&quot;Table not found&quot;:</strong> Re-run schema with <code>sqlite3 games.db &lt; schema.sql</code></li>
-<li><strong>Access denied:</strong> Check file permissions in database folder</li>
-<li><strong>Foreign keys not working:</strong> Ensure <code>PRAGMA foreign_keys = ON;</code> is set</li>
-<li><strong>Data not persisting:</strong> Verify you&#39;re in the correct database file</li>
-<li><strong>Backup:</strong> Always backup DB before destructive operations</li>
-</ul>
-<p><strong>Annotation:</strong> Use <code>PRAGMA foreign_keys = ON;</code> to enforce referential integrity. Check SQLite documentation for specific error codes. For production, consider adding transactions for data consistency.</p>
-<ul>
-<li>Enhanced the annotation with additional practical advice</li>
-<li>Made the content more actionable with clear command examples</li>
-<li>Maintained all original content while improving organization and completeness</li>
+<li>Open and explore your SQLite database</li>
+<li>Verify tables, columns, and foreign keys</li>
+<li>Test and validate your SQL queries</li>
+<li>Export or import data easily</li>
 </ul>
