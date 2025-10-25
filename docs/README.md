@@ -46,14 +46,14 @@ All files are located under `/docs/` or can be read directly on GitHub.
 
 | Part                                                                             | Topic                                  | Description                                                   |
 | -------------------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------- |
-| [**Part 1 – Environment Setup & Overview**](docs/part1_environment_setup.md)                 | Tool installation and folder structure | Learn to install Node.js, SQLite, VS Code, and Git            |
-| [**Part 2 – Bash Project Setup Script**](docs/part2_bash_setup.md)               | Automating setup                       | Understand how the script scaffolds the project automatically |
-| [**Part 3 – Backend Code (`server.js`)**](docs/part3_backend_code.md)                 | Node.js + Express + SQLite integration | Learn how to serve APIs and connect to the database           |
-| [**Part 4 – Database Schema (`schema.sql`)**](docs/part4_database_schema.md)     | Database design                        | Learn how to structure data and relationships in SQL          |
-| [**Part 5 – Common Queries (`queries.sql`)**](docs/part5_common_queries.md)             | Data operations                        | Retrieve, filter, and update data with SQL                    |
-| [**Part 6 – SQLite Operations & Verification**](docs/part6_sqlite_operations.md) | Testing and debugging                  | Learn to open, inspect, and verify your database              |
-| [**Part 7 – Frontend (HTML, CSS, JS Overview)**](docs/part7_frontend_overview.md)         | User interface                         | Build responsive and dynamic UI that fetches live data        |
-| [**Part 8 – How It All Works Together**](docs/part8_integration.md)              | End-to-end integration                 | Understand app architecture, PWA features, and deployment     |
+| [**Part 1 – Environment Setup & Overview**](part1_environment_setup.md)                 | Tool installation and folder structure | Learn to install Node.js, SQLite, VS Code, and Git            |
+| [**Part 2 – Bash Project Setup Script**](part2_bash_setup.md)               | Automating setup                       | Understand how the script scaffolds the project automatically |
+| [**Part 3 – Backend Code (`server.js`)**](part3_backend_code.md)                 | Node.js + Express + SQLite integration | Learn how to serve APIs and connect to the database           |
+| [**Part 4 – Database Schema (`schema.sql`)**](part4_database_schema.md)     | Database design                        | Learn how to structure data and relationships in SQL          |
+| [**Part 5 – Common Queries (`queries.sql`)**](part5_common_queries.md)             | Data operations                        | Retrieve, filter, and update data with SQL                    |
+| [**Part 6 – SQLite Operations & Verification**](part6_sqlite_operations.md) | Testing and debugging                  | Learn to open, inspect, and verify your database              |
+| [**Part 7 – Frontend (HTML, CSS, JS Overview)**](part7_frontend_overview.md)         | User interface                         | Build responsive and dynamic UI that fetches live data        |
+| [**Part 8 – How It All Works Together**](part8_integration.md)              | End-to-end integration                 | Understand app architecture, PWA features, and deployment     |
 
 ---
 
