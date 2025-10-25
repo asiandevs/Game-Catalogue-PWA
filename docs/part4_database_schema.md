@@ -92,13 +92,10 @@ INSERT INTO platforms (name) VALUES
 ('Nintendo Switch');
 
 --  Games
-INSERT INTO games (title, release_year, genre_id, platform_id, developer, rating)
-VALUES
-('The Witcher 3: Wild Hunt', 2015, 3, 1, 'CD Projekt Red', 9.8),
-('God of War', 2018, 1, 2, 'Santa Monica Studio', 9.6),
-('Halo Infinite', 2021, 1, 3, '343 Industries', 8.4),
-('Animal Crossing: New Horizons', 2020, 4, 4, 'Nintendo', 9.0),
-('FIFA 22', 2021, 5, 1, 'EA Sports', 7.8);
+INSERT INTO games (title, genre, platform, release_year, developer) VALUES
+    ('The Legend of Zelda', 'Action-Adventure', 'Nintendo Switch', 2017, 'Nintendo'),
+    ('The Witcher 3', 'RPG', 'PC', 2015, 'CD Projekt Red'),
+    ('Among Us', 'Party', 'Mobile', 2018, 'InnerSloth');
 
 --  Pro Tip:
 -- You can add more sample data easily with the same syntax.
