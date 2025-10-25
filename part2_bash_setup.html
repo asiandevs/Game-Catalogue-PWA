@@ -1,0 +1,245 @@
+<h2>⚙️ Part 2 – Bash Project Setup Script (<code>setup-project.sh</code>)</h2>
+<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
+<hr>
+<h3>🧩 1. Purpose of the Script</h3>
+<p>This Bash script automates the creation of every folder, file, and configuration needed for your <strong>Progressive Web App</strong>.
+Instead of manually clicking “New Folder → New File,” the script does everything in seconds.</p>
+<p>💡 <strong>Analogy:</strong>
+Think of it as a <em>factory assembly line</em>—you press one button and your project skeleton is built.</p>
+<hr>
+<h3>🧰 2. Complete Script with Inline Comments</h3>
+<pre><code class="language-bash">#!/bin/bash
+# Tells the system this file should be executed using the Bash shell.
+
+# ==============================
+# PWA Game Catalogue Setup
+# ==============================
+
+echo &quot;Creating Game Catalogue PWA Project Structure...&quot;
+# echo prints messages to the terminal.
+
+# ------------------------------
+# Create Main Project Folder
+# ------------------------------
+
+PROJECT_NAME=&quot;game-catalogue-pwa&quot;   # Declare a variable for reuse
+mkdir $PROJECT_NAME                 # mkdir = make directory
+cd $PROJECT_NAME                    # cd = change into that directory
+
+#  Tip:
+# Using variables lets you reuse names easily if you want to build
+# a similar project later—just change PROJECT_NAME once.
+
+# ------------------------------
+# Create Folder Structure
+# ------------------------------
+
+echo &quot;Creating folders...&quot;
+
+mkdir css js images icons database documentation
+# Creates multiple folders in one line.
+
+# ------------------------------
+# Create HTML Files
+# ------------------------------
+
+echo &quot;Creating HTML files...&quot;
+
+touch index.html catalogue.html about.html
+# touch = create empty files if they don’t exist.
+
+# ------------------------------
+# Create CSS Files
+# ------------------------------
+
+echo &quot;Creating CSS files...&quot;
+
+touch css/style.css css/responsive.css
+# These will define your design and layout rules.
+
+# ------------------------------
+# Create JavaScript Files
+# ------------------------------
+
+echo &quot;Creating JavaScript files...&quot;
+
+touch js/app.js js/database.js js/ui.js
+# app.js  – main logic &amp; service-worker registration
+# database.js – handles DB API calls
+# ui.js – updates the user interface dynamically
+
+# ------------------------------
+# Create Database Files
+# ------------------------------
+
+echo &quot;Creating database file...&quot;
+
+touch database/games.db database/schema.sql database/queries.sql
+# games.db – SQLite file (created automatically when used)
+# schema.sql – table definitions
+# queries.sql – reusable SQL statements
+
+# ------------------------------
+# Create PWA Config Files
+# ------------------------------
+
+echo &quot;Creating PWA files...&quot;
+
+touch manifest.json service-worker.js
+# manifest.json – metadata for installable app
+# service-worker.js – enables offline caching
+
+# ------------------------------
+# Create Documentation Files
+# ------------------------------
+
+echo &quot;Creating documentation files...&quot;
+
+touch documentation/process-diary.md \
+      documentation/gantt-chart.md \
+      documentation/storyboard.md
+
+# These are often required for school/assessment deliverables.
+
+# ------------------------------
+# Create README.md
+# ------------------------------
+
+cat &gt; README.md &lt;&lt; &#39;EOF&#39;
+# Game Catalogue PWA
+First part of read me
+
+Created: $(date)
+EOF
+# cat &gt; &lt;&lt; &#39;EOF&#39; ... EOF writes multiple lines to a file in one go.
+# $(date) prints the current date/time.
+
+# ------------------------------
+# Create package.json for Node Dependencies
+# ------------------------------
+
+cat &gt; package.json &lt;&lt; &#39;EOF&#39;
+{
+  &quot;name&quot;: &quot;game-catalogue-pwa&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;A PWA for cataloguing video games&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;node server.js&quot;
+  },
+  &quot;keywords&quot;: [&quot;pwa&quot;, &quot;games&quot;, &quot;catalogue&quot;],
+  &quot;author&quot;: &quot;Your Name&quot;,
+  &quot;license&quot;: &quot;MIT&quot;,
+  &quot;dependencies&quot;: {
+    &quot;express&quot;: &quot;^4.18.2&quot;,
+    &quot;sqlite3&quot;: &quot;^5.1.6&quot;
+  }
+}
+EOF
+# package.json tells Node which packages to install and how to start the server.
+
+# ------------------------------
+# Create Simple Express Server
+# ------------------------------
+
+cat &gt; server.js &lt;&lt; &#39;EOF&#39;
+// Simple Express server for PWA
+const express = require(&#39;express&#39;);          // Web framework
+const sqlite3 = require(&#39;sqlite3&#39;).verbose(); // SQLite driver
+const path = require(&#39;path&#39;);                 // Handles file paths
+
+const app = express();                       // Initialize Express
+const PORT = 3000;                           // Port number for server
+
+// ---------------- Middleware ----------------
+app.use(express.json());                     // Parse JSON bodies
+app.use(express.static(__dirname));          // Serve static files
+
+// ---------------- Database Connection ----------------
+const db = new sqlite3.Database(&#39;./database/games.db&#39;, (err) =&gt; {
+    if (err) {
+        console.error(&#39;Error connecting to database:&#39;, err);
+    } else {
+        console.log(&#39;Connected to SQLite database&#39;);
+    }
+});
+
+// ---------------- API Endpoint ----------------
+// GET /api/games → return all games
+app.get(&#39;/api/games&#39;, (req, res) =&gt; {
+    db.all(&#39;SELECT * FROM games&#39;, [], (err, rows) =&gt; {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows); // send data as JSON
+    });
+});
+
+// ---------------- Start Server ----------------
+app.listen(PORT, () =&gt; {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
+EOF
+
+# ------------------------------
+# Final Output
+# ------------------------------
+
+echo &quot;&quot;
+echo &quot;Project structure created successfully!&quot;
+echo &quot;Project location: $(pwd)&quot;
+echo &quot;&quot;
+echo &quot;Next steps:&quot;
+echo &quot;1. cd $PROJECT_NAME&quot;
+echo &quot;2. npm install&quot;
+echo &quot;3. Open the folder in VS Code: code .&quot;
+echo &quot;&quot;
+</code></pre>
+<hr>
+<h3>💡 3. How to Run the Script</h3>
+<pre><code class="language-bash">chmod +x setup-project.sh   # Make script executable
+./setup-project.sh          # Run it
+</code></pre>
+<p>When it finishes, your complete directory tree will appear automatically.</p>
+<hr>
+<h3>⚙️ 4. Behind the Scenes</h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Variables</strong></td>
+<td>Reusable placeholders (<code>$PROJECT_NAME</code>)</td>
+</tr>
+<tr>
+<td><strong>Commands</strong></td>
+<td><code>mkdir</code>, <code>touch</code>, <code>cat</code>, <code>echo</code> control file system</td>
+</tr>
+<tr>
+<td><strong>Heredoc (EOF)</strong></td>
+<td>Writes multi-line text into files easily</td>
+</tr>
+<tr>
+<td><strong>Permissions</strong></td>
+<td><code>chmod +x</code> lets others execute the script</td>
+</tr>
+<tr>
+<td><strong>Automation</strong></td>
+<td>Eliminates manual file creation and typos</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Pro Tip:</strong>
+Scripts like this are common in DevOps—when you deploy or scaffold new environments.</p>
+<hr>
+<h3>✅ 5. What You Achieved</h3>
+<p>After running this script, you now have:</p>
+<ul>
+<li>✅ Folder structure for code, data, and docs</li>
+<li>✅ Starter HTML, CSS, JS, and database files</li>
+<li>✅ Configured Node project (<code>package.json</code>)</li>
+<li>✅ Working Express + SQLite server boilerplate</li>
+</ul>
