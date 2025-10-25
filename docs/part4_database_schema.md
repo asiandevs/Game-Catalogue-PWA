@@ -12,6 +12,11 @@ This SQL script defines the **structure** of your SQLite database — the *bluep
 Think of the database schema like a **blueprint for a library** —
 each `CREATE TABLE` builds a new bookshelf, and each `FOREIGN KEY` defines how shelves relate.
 
+**Annotation:** 
+The games table uses INTEGER PRIMARY KEY AUTOINCREMENT for unique IDs.
+title is NOT NULL to ensure every game has a name. Other fields are optional to
+accommodate incomplete data. The INSERT statement populates sample data for testing.
+
 ---
 
 ###  Complete Annotated SQL Schema
