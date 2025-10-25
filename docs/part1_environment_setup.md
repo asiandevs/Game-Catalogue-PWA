@@ -1,253 +1,181 @@
-## ⚙️ Part 2 – Bash Project Setup Script (`setup-project.sh`)
+## 📘 Part 1: Environment Setup and Project Overview
 
 *From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”*
 
 ---
 
-### 🧩 1. Purpose of the Script
+### 🧰 1. Overview
 
-This Bash script automates the creation of every folder, file, and configuration needed for your **Progressive Web App**.
-Instead of manually clicking “New Folder → New File,” the script does everything in seconds.
+This project is a **Progressive Web App (PWA)** that catalogs video games.
+It combines multiple technologies to teach students **full-stack web development**.
+
+| Layer    | Technology            | Purpose                                 |
+| -------- | --------------------- | --------------------------------------- |
+| Frontend | HTML, CSS, JavaScript | Builds the user interface               |
+| Backend  | Node.js + Express     | Handles API requests                    |
+| Database | SQLite3               | Stores games, genres, and platforms     |
+| Tooling  | Bash + VS Code + Git  | Automates setup and manages source code |
 
 💡 **Analogy:**
-Think of it as a *factory assembly line*—you press one button and your project skeleton is built.
+Think of the app as a library system:
+
+* **Frontend** = the library counter where users search for books (games).
+* **Backend** = the librarian who fetches and manages data.
+* **Database** = the shelves storing all books.
 
 ---
 
-### 🧰 2. Complete Script with Inline Comments
+### 🧑‍💻 2. Installing Development Tools (macOS example)
+
+#### 🔹 Step 1 – Install VS Code
+
+Visit 👉 [https://code.visualstudio.com/](https://code.visualstudio.com/)
+Download **Mac Universal** → unzip → move **Visual Studio Code.app** to `/Applications`.
+
+💡 **Tip:**
+VS Code is your “command center” — you’ll edit, run, and debug all code here.
+
+---
+
+#### 🔹 Step 2 – Install Node.js
+
+Visit 👉 [https://nodejs.org/](https://nodejs.org/)
+Download the **LTS (Long Term Support)** version and run the `.pkg` installer.
+
+Verify installation:
 
 ```bash
-#!/bin/bash
-# Tells the system this file should be executed using the Bash shell.
-
-# ==============================
-#  PWA Game Catalogue Setup
-# ==============================
-
-echo "Creating Game Catalogue PWA Project Structure..."
-# echo prints messages to the terminal.
-
-# ------------------------------
-#  Create Main Project Folder
-# ------------------------------
-
-PROJECT_NAME="game-catalogue-pwa"   # Declare a variable for reuse
-mkdir $PROJECT_NAME                 # mkdir = make directory
-cd $PROJECT_NAME                    # cd = change into that directory
-
-# Tip:
-# Using variables lets you reuse names easily if you want to build
-# a similar project later—just change PROJECT_NAME once.
-
-# ------------------------------
-# Create Folder Structure
-# ------------------------------
-
-echo "Creating folders..."
-
-mkdir css js images icons database documentation
-# Creates multiple folders in one line.
-
-# ------------------------------
-# Create HTML Files
-# ------------------------------
-
-echo "Creating HTML files..."
-
-touch index.html catalogue.html about.html
-# touch = create empty files if they don’t exist.
-
-# ------------------------------
-# Create CSS Files
-# ------------------------------
-
-echo "Creating CSS files..."
-
-touch css/style.css css/responsive.css
-# These will define your design and layout rules.
-
-# ------------------------------
-# Create JavaScript Files
-# ------------------------------
-
-echo "Creating JavaScript files..."
-
-touch js/app.js js/database.js js/ui.js
-# app.js  – main logic & service-worker registration
-# database.js – handles DB API calls
-# ui.js – updates the user interface dynamically
-
-# ------------------------------
-# Create Database Files
-# ------------------------------
-
-echo "Creating database file..."
-
-touch database/games.db database/schema.sql database/queries.sql
-# games.db – SQLite file (created automatically when used)
-# schema.sql – table definitions
-# queries.sql – reusable SQL statements
-
-# ------------------------------
-# Create PWA Config Files
-# ------------------------------
-
-echo "Creating PWA files..."
-
-touch manifest.json service-worker.js
-# manifest.json – metadata for installable app
-# service-worker.js – enables offline caching
-
-# ------------------------------
-# Create Documentation Files
-# ------------------------------
-
-echo "Creating documentation files..."
-
-touch documentation/process-diary.md \
-      documentation/gantt-chart.md \
-      documentation/storyboard.md
-
-# These are often required for school/assessment deliverables.
-
-# ------------------------------
-# Create README.md
-# ------------------------------
-
-cat > README.md << 'EOF'
-# Game Catalogue PWA
-First part of read me
-
-Created: $(date)
-EOF
-# cat > << 'EOF' ... EOF writes multiple lines to a file in one go.
-# $(date) prints the current date/time.
-
-# ------------------------------
-# Create package.json for Node Dependencies
-# ------------------------------
-
-cat > package.json << 'EOF'
-{
-  "name": "game-catalogue-pwa",
-  "version": "1.0.0",
-  "description": "A PWA for cataloguing video games",
-  "main": "index.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "keywords": ["pwa", "games", "catalogue"],
-  "author": "Monowar Mukul",
-  "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.2",
-    "sqlite3": "^5.1.6"
-  }
-}
-EOF
-# package.json tells Node which packages to install and how to start the server.
-
-# ------------------------------
-# Create Simple Express Server
-# ------------------------------
-
-cat > server.js << 'EOF'
-// Simple Express server for PWA
-const express = require('express');          // Web framework
-const sqlite3 = require('sqlite3').verbose(); // SQLite driver
-const path = require('path');                 // Handles file paths
-
-const app = express();                       // Initialize Express
-const PORT = 3000;                           // Port number for server
-
-// ---------------- Middleware ----------------
-app.use(express.json());                     // Parse JSON bodies
-app.use(express.static(__dirname));          // Serve static files
-
-// ---------------- Database Connection ----------------
-const db = new sqlite3.Database('./database/games.db', (err) => {
-    if (err) {
-        console.error('Error connecting to database:', err);
-    } else {
-        console.log('Connected to SQLite database');
-    }
-});
-
-// ---------------- API Endpoint ----------------
-// GET /api/games → return all games
-app.get('/api/games', (req, res) => {
-    db.all('SELECT * FROM games', [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(rows); // send data as JSON
-    });
-});
-
-// ---------------- Start Server ----------------
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
-EOF
-
-# ------------------------------
-# Final Output
-# ------------------------------
-
-echo ""
-echo "Project structure created successfully!"
-echo "Project location: $(pwd)"
-echo ""
-echo "Next steps:"
-echo "1. cd $PROJECT_NAME"
-echo "2. npm install"
-echo "3. Open the folder in VS Code: code ."
-echo ""
+node --version   # Should print something like v20.x.x
+npm --version    # npm comes bundled with Node.js
 ```
+
+💡 **Note:**
+`node` runs JavaScript outside the browser.
+`npm` (Node Package Manager) installs project dependencies (like Express or SQLite).
 
 ---
 
-### 3. How to Run the Script
+#### 🔹 Step 3 – Verify SQLite3
+
+SQLite is pre-installed on macOS. Check version:
 
 ```bash
-chmod +x setup-project.sh   # Make script executable
-./setup-project.sh          # Run it
+sqlite3 --version   # Outputs the SQLite version number
 ```
 
-When it finishes, your complete directory tree will appear automatically.
+⚙️ **If missing:**
+Install using Homebrew → `brew install sqlite3`
+
+💡 **Tip:**
+SQLite is a lightweight, file-based database — perfect for prototypes or local apps.
+All data lives in one file (e.g., `games.db`).
 
 ---
 
-### ⚙️ 4. Behind the Scenes
+#### 🔹 Step 4 – Install VS Code Extensions
 
-| Concept           | Description                                         |
-| ----------------- | --------------------------------------------------- |
-| **Variables**     | Reusable placeholders (`$PROJECT_NAME`)             |
-| **Commands**      | `mkdir`, `touch`, `cat`, `echo` control file system |
-| **Heredoc (EOF)** | Writes multi-line text into files easily            |
-| **Permissions**   | `chmod +x` lets others execute the script           |
-| **Automation**    | Eliminates manual file creation and typos           |
+Open VS Code → click **Extensions** icon or press `Cmd + Shift + X`.
+Install the following:
 
-💡 **Pro Tip:**
-Scripts like this are common in DevOps—when you deploy or scaffold new environments.
+| Extension                    | Purpose                               |
+| ---------------------------- | ------------------------------------- |
+| `SQLite` by alexcvzz         | Browse and query `.db` files visually |
+| `Live Server` by Ritwick Dey | Preview HTML files instantly          |
+| `ESLint` by Microsoft        | Linting and syntax checking for JS    |
+| `Prettier – Code Formatter`  | Automatically format code             |
 
----
-
-### 5. What You Achieved
-
-After running this script, you now have:
-
-* ✅ Folder structure for code, data, and docs
-* ✅ Starter HTML, CSS, JS, and database files
-* ✅ Configured Node project (`package.json`)
-* ✅ Working Express + SQLite server boilerplate
+💡 **Best Practice:**
+After installing, reload VS Code to activate them.
 
 ---
 
-### 🔜 Next Part
+#### 🔹 Step 5 – Install Git
 
-Proceed to **Part 3 – Backend Code (`server.js`)**,
-where we’ll dive deeper into how Node.js + Express + SQLite work together.
+Git tracks your code changes — essential for version control and GitHub uploads.
+
+```bash
+git --version
+# If missing:
+# brew install git
+```
+
+Then configure your identity:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+💡 **Tip:**
+You’ll later push this project to a GitHub repository for collaboration or submission.
+
+---
+
+### 🗂️ 3. Understanding Project Folder Structure
+
+Once the setup script runs (next part), your folder tree will look like this:
+
+```
+game-catalogue-pwa/
+│
+├── css/                  # Stylesheets (look & feel)
+│   ├── style.css
+│   └── responsive.css
+│
+├── js/                   # Frontend JavaScript
+│   ├── app.js
+│   ├── database.js
+│   └── ui.js
+│
+├── database/             # SQLite database and SQL files
+│   ├── games.db
+│   ├── schema.sql
+│   └── queries.sql
+│
+├── icons/                # App icons for manifest
+├── images/               # Game cover images
+│
+├── documentation/        # Assignment docs (diary, charts, etc.)
+│
+├── index.html            # Home page
+├── catalogue.html        # Game list page
+├── about.html            # About page
+│
+├── manifest.json         # PWA metadata
+├── service-worker.js     # Offline caching logic
+│
+├── server.js             # Node.js backend
+├── package.json          # Project dependencies
+├── setup-project.sh      # Automation script
+└── README.md             # Documentation (this guide)
+```
+
+💡 **Note:**
+This structure keeps each layer separate — styling, logic, data, and documentation — which is a core best practice in software engineering.
+
+---
+
+### 🔗 4. Workflow Overview
+
+1. **Run the Bash script** to create the folder skeleton.
+2. **Install dependencies** (`npm install`) using `package.json`.
+3. **Initialize SQLite database** by executing `schema.sql`.
+4. **Start the backend server** (`node server.js`).
+5. **Serve and test the app** with **Live Server** (frontend) or by hitting the API endpoint at `http://localhost:3000/api/games`.
+
+💡 **Analogy:**
+Imagine building a house:
+
+* Bash script = lays the foundation (folders & files)
+* SQLite schema = builds the rooms (tables & data)
+* Node.js backend = installs the wiring (logic & data flow)
+* HTML/CSS/JS = paints and furnishes the house (UI/UX)
+
+---
+
+### ✅ 5. Next Steps
+
+In **Part 2**, you’ll learn how the Bash automation script works (`setup-project.sh`) —
+how each command creates your project’s foundation automatically.
 
 ---
