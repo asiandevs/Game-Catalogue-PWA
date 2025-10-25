@@ -1,0 +1,129 @@
+<h2>Part 3 – Backend Code (<code>server.js</code>)</h2>
+<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
+<hr>
+<h3>🎯 Goal</h3>
+<p>This file starts a small <strong>Express web server</strong> that:</p>
+<ol>
+<li>Connects to a <strong>SQLite database</strong></li>
+<li>Exposes a REST API endpoint (<code>/api/games</code>)</li>
+<li>Serves your PWA’s static files</li>
+</ol>
+<hr>
+<h3>💻 Full Code with Inline Comments</h3>
+<pre><code class="language-js">// ======================================================
+//   server.js – Backend logic for Game Catalogue PWA
+// ======================================================
+
+// ---------------- Required Modules ----------------
+const express = require(&#39;express&#39;);          // lightweight web framework for Node
+const sqlite3 = require(&#39;sqlite3&#39;).verbose(); // SQLite driver (verbose = extra debug info)
+const path = require(&#39;path&#39;);                 // built-in module to handle file paths
+
+// ---------------- App Initialization ----------------
+const app = express();    // create an Express application
+const PORT = 3000;        // server will listen on http://localhost:3000
+
+// ---------------- Middleware ----------------
+app.use(express.json());          // parses incoming JSON requests
+app.use(express.static(__dirname)); // serves all files (html, css, js) in current dir
+
+/*  Note:
+   Middleware = “in-between” code that runs before routes.
+   express.json() lets you send/receive JSON.
+   express.static() turns the folder into a mini web server.
+*/
+
+// ---------------- Database Connection ----------------
+const db = new sqlite3.Database(&#39;./database/games.db&#39;, (err) =&gt; {
+  if (err) {
+    console.error(&#39; Error connecting to database:&#39;, err.message);
+  } else {
+    console.log(&#39; Connected to SQLite database&#39;);
+  }
+});
+
+/*  Tip:
+   new sqlite3.Database(path, callback)
+   - creates/opens the database file
+   - if missing, SQLite creates it automatically
+*/
+
+// ---------------- Sample API Route ----------------
+app.get(&#39;/api/games&#39;, (req, res) =&gt; {
+  // run an SQL query and return results as JSON
+  const sql = &#39;SELECT * FROM games&#39;;
+  db.all(sql, [], (err, rows) =&gt; {
+    if (err) {
+      res.status(500).json({ error: err.message }); // 500 = server error
+      return;
+    }
+    res.json(rows); // send array of games to browser
+  });
+});
+
+/*  Note:
+   db.all(sql, params, callback)
+   - executes a SELECT query
+   - returns all rows in an array (‘rows’)
+   Perfect for read-only data fetches.
+*/
+
+// ---------------- Start Server ----------------
+app.listen(PORT, () =&gt; {
+  console.log(` Server running at http://localhost:${PORT}`);
+});
+
+/*  Analogy:
+   Express = restaurant
+   - app.get(&#39;/api/games&#39;) = waiter who takes orders
+   - db.all() = chef who cooks data from the kitchen (database)
+   - res.json() = plate served back to customer (browser)
+*/
+</code></pre>
+<hr>
+<h3>🧭 How to Run</h3>
+<pre><code class="language-bash">npm install     # installs express and sqlite3 packages
+node server.js  # starts server on port 3000
+</code></pre>
+<p>Then open → <a href="http://localhost:3000/api/games">http://localhost:3000/api/games</a>
+You should see JSON data (or an empty array until you build the database).</p>
+<hr>
+<h3>🧩 Key Concepts Recap</h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Express App</strong></td>
+<td>Simplifies HTTP server creation</td>
+</tr>
+<tr>
+<td><strong>Middleware</strong></td>
+<td>Functions that process requests before routes</td>
+</tr>
+<tr>
+<td><strong>Route Handler</strong></td>
+<td>Defines what happens for a given URL</td>
+</tr>
+<tr>
+<td><strong>SQLite Driver</strong></td>
+<td>Lets Node talk to a SQLite file</td>
+</tr>
+<tr>
+<td><strong>API Endpoint</strong></td>
+<td>URL returning JSON instead of HTML</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Pro Tip:</strong>
+Add more routes like <code>/api/genres</code>, <code>/api/platforms</code>, or <code>/api/stats</code> by copying the same pattern.</p>
+<hr>
+<h3>✅ Outcome</h3>
+<p>You now have a live backend that:</p>
+<ul>
+<li>Serves web pages and static assets</li>
+<li>Connects to a SQLite database</li>
+<li>Returns game data via a REST API</li>
+</ul>
