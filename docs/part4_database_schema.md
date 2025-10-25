@@ -73,3 +73,79 @@ INSERT INTO games (title, genre_id, platform_id, release_year, developer, rating
     ('The Legend of Zelda', 2, 4, 2017, 'Nintendo', 9.5),
     ('The Witcher 3', 3, 1, 2015, 'CD Projekt Red', 9.3),
     ('Among Us', 4, NULL, 2018, 'InnerSloth', 8.0);
+```
+
+---
+
+### 🧩  Key Concepts Explained
+
+| Concept              | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| **Table**            | A structured collection of related data (like a spreadsheet) |
+| **Primary Key (PK)** | Unique ID for each record (auto-incremented number)          |
+| **Foreign Key (FK)** | Links a record to another table’s primary key                |
+| **NOT NULL**         | Field must contain a value (no blanks)                       |
+| **UNIQUE**           | No two records can have the same value in that column        |
+| **AUTOINCREMENT**    | Automatically generates the next available ID                |
+
+💡 **Tip:**
+SQLite allows you to explore the schema interactively:
+
+```sql
+.schema games       -- shows structure of the games table
+```
+
+---
+
+### 🧠 Example Query Output
+
+After running this schema, if you query:
+
+```sql
+SELECT title, release_year, name AS genre
+FROM games
+JOIN genres ON games.genre_id = genres.id;
+```
+
+You’ll get something like:
+
+| title                    | release_year | genre  |
+| ------------------------ | ------------ | ------ |
+| The Witcher 3: Wild Hunt | 2015         | RPG    |
+| God of War               | 2018         | Action |
+| Halo Infinite            | 2021         | Action |
+
+---
+
+### 🧪 How to Run schema.sql
+
+Inside your project directory:
+
+```bash
+cd database
+sqlite3 games.db < schema.sql
+```
+
+✅ This command:
+
+* Opens (or creates) `games.db`
+* Runs every SQL statement in `schema.sql`
+* Populates the database with tables and sample data
+
+To verify:
+
+```bash
+sqlite3 games.db
+.tables              # lists all tables
+SELECT * FROM games; # view inserted records
+```
+
+---
+
+### ✅ Outcome
+
+After executing this script, you now have:
+
+* 3 tables (`games`, `genres`, `platforms`)
+* Proper relationships via foreign keys
+* Example records ready for backend queries
