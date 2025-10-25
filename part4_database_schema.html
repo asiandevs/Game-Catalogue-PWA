@@ -6,6 +6,10 @@
 <p>💡 <strong>Analogy:</strong>
 Think of the database schema like a <strong>blueprint for a library</strong> —
 each <code>CREATE TABLE</code> builds a new bookshelf, and each <code>FOREIGN KEY</code> defines how shelves relate.</p>
+<p><strong>Annotation:</strong> 
+The games table uses INTEGER PRIMARY KEY AUTOINCREMENT for unique IDs.
+title is NOT NULL to ensure every game has a name. Other fields are optional to
+accommodate incomplete data. The INSERT statement populates sample data for testing.</p>
 <hr>
 <h3>Complete Annotated SQL Schema</h3>
 <pre><code class="language-sql">-- ======================================================
