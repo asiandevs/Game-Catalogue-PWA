@@ -1,0 +1,234 @@
+<h2>🔍 Part 5 – Common Queries (<code>queries.sql</code>)</h2>
+<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
+<hr>
+<h3>🎯 Goal</h3>
+<p>This file contains <strong>SQL commands</strong> your backend can use to display, search, or modify data in the game catalogue.
+Each query focuses on a common real-world operation — such as listing games, filtering by platform, or updating ratings.</p>
+<p>💡 <strong>Analogy:</strong>
+If your <strong>database</strong> is a library and <strong>schema.sql</strong> built the shelves,
+then <strong>queries.sql</strong> is your librarian’s “playbook” — how they find, update, or report on books (games).</p>
+<hr>
+<h3>Complete Annotated SQL Queries</h3>
+<pre><code class="language-sql">-- ======================================================
+--  queries.sql – SQL queries for Game Catalogue PWA
+-- ======================================================
+
+-- ----------------------------
+-- 1️ List all games
+-- ----------------------------
+SELECT * FROM games;
+
+--  Note:
+-- SELECT * means “get all columns” — useful for debugging but not ideal in production.
+-- Prefer SELECT column1, column2, ... for efficiency.
+
+-- ----------------------------
+-- 2️ List all genres
+-- ----------------------------
+SELECT * FROM genres;
+
+-- ----------------------------
+-- 3️ List all platforms
+-- ----------------------------
+SELECT * FROM platforms;
+
+-- ----------------------------
+-- 4️ Show games with genre and platform names
+-- ----------------------------
+SELECT g.id, g.title, g.release_year,
+       ge.name AS genre,
+       p.name AS platform,
+       g.developer, g.rating
+FROM games g
+JOIN genres ge ON g.genre_id = ge.id
+JOIN platforms p ON g.platform_id = p.id
+ORDER BY g.title;
+
+--  Tip:
+-- JOIN combines data across multiple tables.
+-- “AS genre” renames the column for readability.
+-- ORDER BY sorts alphabetically by title.
+
+-- ----------------------------
+-- 5️ Filter games by a specific genre (example: RPG)
+-- ----------------------------
+SELECT g.title, g.release_year, ge.name AS genre
+FROM games g
+JOIN genres ge ON g.genre_id = ge.id
+WHERE ge.name = &#39;RPG&#39;;
+
+--  Note:
+-- WHERE filters records. 
+-- This would list only games where genre = &#39;RPG&#39;.
+
+-- ----------------------------
+-- 6️ Filter games released after a certain year
+-- ----------------------------
+SELECT title, release_year
+FROM games
+WHERE release_year &gt;= 2020
+ORDER BY release_year DESC;
+
+--  Tip:
+-- Use &gt;=, &lt;=, &gt;, &lt; for numeric comparisons.
+-- DESC = descending order.
+
+-- ----------------------------
+-- 7️ Find all games for a particular platform (example: PlayStation)
+-- ----------------------------
+SELECT g.title, p.name AS platform
+FROM games g
+JOIN platforms p ON g.platform_id = p.id
+WHERE p.name = &#39;PlayStation&#39;;
+
+-- ----------------------------
+-- 8️ Find games by a specific developer
+-- ----------------------------
+SELECT title, developer, rating
+FROM games
+WHERE developer = &#39;Nintendo&#39;;
+
+-- ----------------------------
+-- 9️ Show games with ratings above 9.0
+-- ----------------------------
+SELECT title, rating
+FROM games
+WHERE rating &gt; 9.0
+ORDER BY rating DESC;
+
+--  Example Output:
+-- | title                    | rating |
+-- |---------------------------|--------|
+-- | The Witcher 3: Wild Hunt  | 9.8    |
+-- | God of War                | 9.6    |
+
+-- ----------------------------
+-- 10 Update a game’s rating
+-- ----------------------------
+UPDATE games
+SET rating = 9.7
+WHERE title = &#39;Halo Infinite&#39;;
+
+--  Note:
+-- UPDATE changes existing data.
+-- Always use WHERE to limit which rows get updated!
+
+-- ----------------------------
+-- 11 Add a new game
+-- ----------------------------
+INSERT INTO games (title, release_year, genre_id, platform_id, developer, rating)
+VALUES (&#39;Elden Ring&#39;, 2022, 3, 1, &#39;FromSoftware&#39;, 9.5);
+
+--  Tip:
+-- INSERT adds new data. Column order must match VALUES order.
+
+-- ----------------------------
+-- 12️ Delete a game from the catalogue
+-- ----------------------------
+DELETE FROM games
+WHERE title = &#39;FIFA 22&#39;;
+
+--  Warning:
+-- DELETE removes data permanently unless wrapped in a transaction.
+-- Always double-check your WHERE clause.
+
+-- ----------------------------
+-- 13️ Count how many games per genre
+-- ----------------------------
+SELECT ge.name AS genre, COUNT(g.id) AS total_games
+FROM games g
+JOIN genres ge ON g.genre_id = ge.id
+GROUP BY ge.name
+ORDER BY total_games DESC;
+
+--  Explanation:
+-- GROUP BY groups rows by genre.
+-- COUNT counts how many games fall in each genre.
+
+-- ----------------------------
+-- 14️ Get average rating by platform
+-- ----------------------------
+SELECT p.name AS platform, ROUND(AVG(g.rating), 2) AS avg_rating
+FROM games g
+JOIN platforms p ON g.platform_id = p.id
+GROUP BY p.name
+ORDER BY avg_rating DESC;
+
+--  Tip:
+-- AVG() = average, ROUND(value, 2) limits to 2 decimal places.
+
+-- ----------------------------
+-- 15️ Find the most recently released game
+-- ----------------------------
+SELECT title, release_year
+FROM games
+ORDER BY release_year DESC
+LIMIT 1;
+
+--  Note:
+-- LIMIT restricts how many rows are returned.
+-- Useful when you only need one result (like &quot;latest game&quot;).
+</code></pre>
+<hr>
+<h3>🧠 Concept Summary</h3>
+<table>
+<thead>
+<tr>
+<th>SQL Keyword</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SELECT</strong></td>
+<td>Reads data from a table</td>
+</tr>
+<tr>
+<td><strong>FROM</strong></td>
+<td>Specifies the table</td>
+</tr>
+<tr>
+<td><strong>JOIN</strong></td>
+<td>Combines data from multiple tables</td>
+</tr>
+<tr>
+<td><strong>WHERE</strong></td>
+<td>Filters results</td>
+</tr>
+<tr>
+<td><strong>ORDER BY</strong></td>
+<td>Sorts results ascending (ASC) or descending (DESC)</td>
+</tr>
+<tr>
+<td><strong>GROUP BY</strong></td>
+<td>Groups similar records for aggregation</td>
+</tr>
+<tr>
+<td><strong>COUNT / AVG</strong></td>
+<td>Performs calculations across rows</td>
+</tr>
+<tr>
+<td><strong>INSERT / UPDATE / DELETE</strong></td>
+<td>Modifies database content</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>Pro Tip:</strong>
+When experimenting, always start with <code>SELECT</code> before running <code>UPDATE</code> or <code>DELETE</code> — to confirm which rows you’ll affect.</p>
+<hr>
+<h3>🧪 How to Run These Queries</h3>
+<pre><code class="language-bash">cd database
+sqlite3 games.db
+.read queries.sql   # execute all queries
+</code></pre>
+<p>To run one query manually:</p>
+<pre><code class="language-sql">SELECT * FROM games WHERE rating &gt; 9.0;
+</code></pre>
+<hr>
+<h3>✅ Outcome</h3>
+<p>After working through <code>queries.sql</code>, you can now:</p>
+<ul>
+<li>Retrieve, filter, and sort game data</li>
+<li>Insert and update records safely</li>
+<li>Combine data across multiple tables</li>
+<li>Generate statistics (counts, averages)</li>
+</ul>
+<p>Would you like me to continue with <strong>Part 6 – SQLite Operations &amp; Verification</strong> in the same GitHub-ready annotated Markdown format next?</p>
