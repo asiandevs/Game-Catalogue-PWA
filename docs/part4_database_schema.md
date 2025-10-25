@@ -14,20 +14,32 @@ and `platforms`, with relationships via foreign keys.
 Dropping tables ensures clean rebuilds. Sample data populates the tables for testing.
 
 ```sql
+-- ----------------------------
+--   Drop old tables if they exist (for clean rebuilds)
+-- ----------------------------
 DROP TABLE IF EXISTS games;
 DROP TABLE IF EXISTS genres;
 DROP TABLE IF EXISTS platforms;
 
+-- ----------------------------
+--   Create Genres Table
+-- ----------------------------
 CREATE TABLE genres (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE
 );
 
+-- ----------------------------
+--   Create Platforms Table
+-- ----------------------------
 CREATE TABLE platforms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE
 );
 
+-- ----------------------------
+--   Create Games Table
+-- ----------------------------
 CREATE TABLE games (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
@@ -39,6 +51,10 @@ CREATE TABLE games (
     FOREIGN KEY (genre_id) REFERENCES genres(id),
     FOREIGN KEY (platform_id) REFERENCES platforms(id)
 );
+
+-- ----------------------------
+--   Insert Sample Data
+-- ----------------------------
 
 INSERT INTO genres (name) VALUES
     ('Action'),
