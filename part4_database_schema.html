@@ -1,192 +1,49 @@
-<h2>Part 4 – Database Schema (<code>schema.sql</code>)</h2>
-<p><em>From the “Full-Stack Annotated Study Guide: Game Catalogue PWA (SQLite + Node.js + HTML/CSS/JS)”</em></p>
-<hr>
-<h3>🎯 Goal</h3>
-<p>This SQL script defines the <strong>structure</strong> of your SQLite database — the <em>blueprint</em> for how data is stored, related, and retrieved.</p>
-<p>💡 <strong>Analogy:</strong>
-Think of the database schema like a <strong>blueprint for a library</strong> —
-each <code>CREATE TABLE</code> builds a new bookshelf, and each <code>FOREIGN KEY</code> defines how shelves relate.</p>
-<p><strong>Annotation:</strong> 
-The games table uses INTEGER PRIMARY KEY AUTOINCREMENT for unique IDs.
-title is NOT NULL to ensure every game has a name. Other fields are optional to
-accommodate incomplete data. The INSERT statement populates sample data for testing.</p>
-<hr>
-<h3>Complete Annotated SQL Schema</h3>
-<pre><code class="language-sql">-- ======================================================
---  schema.sql – Database design for Game Catalogue PWA
--- ======================================================
-
--- ----------------------------
--- 1️  Drop old tables if they exist (for clean rebuilds)
--- ----------------------------
-DROP TABLE IF EXISTS games;
+<h1>Part 4: Database Schema and Setup</h1>
+<p>This file is part of the <strong>Full-Stack Annotated Study Guide: Game Catalogue PWA</strong><br>repo. It defines the SQLite database schema for the game catalogue and explains its<br>structure. See <a href="../README.md">README.md</a> for the full guide.</p>
+<h2>Database Schema</h2>
+<p>The SQLite database (<code>games.db</code>) stores game data in tables for <code>games</code>, <code>genres</code>,<br>and <code>platforms</code>, with relationships via foreign keys.</p>
+<p><em>Annotation</em>: This schema includes three tables: <code>genres</code> for game genres,<br><code>platforms</code> for gaming platforms, and <code>games</code> linking to both via foreign keys.<br>Dropping tables ensures clean rebuilds. Sample data populates the tables for testing.</p>
+<pre><code class="language-sql">DROP TABLE IF EXISTS games;
 DROP TABLE IF EXISTS genres;
 DROP TABLE IF EXISTS platforms;
 
---  Note:
--- This ensures you can re-run schema.sql multiple times without duplicate errors.
-
--- ----------------------------
--- 2️  Create Genres Table
--- ----------------------------
 CREATE TABLE genres (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- unique ID for each genre
-    name TEXT NOT NULL UNIQUE               -- genre name (must be unique)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
 );
 
---  Example Data:
--- (1, &#39;Action&#39;), (2, &#39;Adventure&#39;), (3, &#39;RPG&#39;), (4, &#39;Puzzle&#39;)
-
--- ----------------------------
--- 3️  Create Platforms Table
--- ----------------------------
 CREATE TABLE platforms (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- unique ID
-    name TEXT NOT NULL UNIQUE              -- e.g., &#39;PC&#39;, &#39;PlayStation&#39;, &#39;Xbox&#39;, &#39;Switch&#39;
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
 );
 
--- ----------------------------
--- 4️  Create Games Table
--- ----------------------------
 CREATE TABLE games (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- unique ID for each game
-    title TEXT NOT NULL,                   -- game title
-    release_year INTEGER,                  -- release year (e.g., 2020)
-    genre_id INTEGER,                      -- link to genres table
-    platform_id INTEGER,                   -- link to platforms table
-    developer TEXT,                        -- studio/developer name
-    rating REAL,                           -- decimal rating (e.g., 8.5)
-    FOREIGN KEY (genre_id) REFERENCES genres(id),      -- relationship to genres
-    FOREIGN KEY (platform_id) REFERENCES platforms(id) -- relationship to platforms
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    release_year INTEGER,
+    genre_id INTEGER,
+    platform_id INTEGER,
+    developer TEXT,
+    rating REAL,
+    FOREIGN KEY (genre_id) REFERENCES genres(id),
+    FOREIGN KEY (platform_id) REFERENCES platforms(id)
 );
 
---  Note:
--- FOREIGN KEY creates a link between tables.
--- Example: “The Witcher 3” (games) belongs to genre_id=3 (“RPG” in genres table).
-
--- ----------------------------
--- 5️  Insert Sample Data
--- ----------------------------
-
---  Genres
 INSERT INTO genres (name) VALUES
-(&#39;Action&#39;),
-(&#39;Adventure&#39;),
-(&#39;RPG&#39;),
-(&#39;Puzzle&#39;),
-(&#39;Sports&#39;);
+    (&#39;Action&#39;),
+    (&#39;Adventure&#39;),
+    (&#39;RPG&#39;),
+    (&#39;Puzzle&#39;),
+    (&#39;Sports&#39;);
 
---  Tip:
--- Use plural table names for consistency. Each row = one record in that category.
-
---  Platforms
 INSERT INTO platforms (name) VALUES
-(&#39;PC&#39;),
-(&#39;PlayStation&#39;),
-(&#39;Xbox&#39;),
-(&#39;Nintendo Switch&#39;);
+    (&#39;PC&#39;),
+    (&#39;PlayStation&#39;),
+    (&#39;Xbox&#39;),
+    (&#39;Nintendo Switch&#39;);
 
---  Games
-INSERT INTO games (title, genre, platform, release_year, developer) VALUES
-    (&#39;The Legend of Zelda&#39;, &#39;Action-Adventure&#39;, &#39;Nintendo Switch&#39;, 2017, &#39;Nintendo&#39;),
-    (&#39;The Witcher 3&#39;, &#39;RPG&#39;, &#39;PC&#39;, 2015, &#39;CD Projekt Red&#39;),
-    (&#39;Among Us&#39;, &#39;Party&#39;, &#39;Mobile&#39;, 2018, &#39;InnerSloth&#39;);
-
---  Pro Tip:
--- You can add more sample data easily with the same syntax.
+INSERT INTO games (title, genre_id, platform_id, release_year, developer, rating) VALUES
+    (&#39;The Legend of Zelda&#39;, 2, 4, 2017, &#39;Nintendo&#39;, 9.5),
+    (&#39;The Witcher 3&#39;, 3, 1, 2015, &#39;CD Projekt Red&#39;, 9.3),
+    (&#39;Among Us&#39;, 4, NULL, 2018, &#39;InnerSloth&#39;, 8.0);
 </code></pre>
-<hr>
-<h3>🧩  Key Concepts Explained</h3>
-<table>
-<thead>
-<tr>
-<th>Concept</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Table</strong></td>
-<td>A structured collection of related data (like a spreadsheet)</td>
-</tr>
-<tr>
-<td><strong>Primary Key (PK)</strong></td>
-<td>Unique ID for each record (auto-incremented number)</td>
-</tr>
-<tr>
-<td><strong>Foreign Key (FK)</strong></td>
-<td>Links a record to another table’s primary key</td>
-</tr>
-<tr>
-<td><strong>NOT NULL</strong></td>
-<td>Field must contain a value (no blanks)</td>
-</tr>
-<tr>
-<td><strong>UNIQUE</strong></td>
-<td>No two records can have the same value in that column</td>
-</tr>
-<tr>
-<td><strong>AUTOINCREMENT</strong></td>
-<td>Automatically generates the next available ID</td>
-</tr>
-</tbody></table>
-<p>💡 <strong>Tip:</strong>
-SQLite allows you to explore the schema interactively:</p>
-<pre><code class="language-sql">.schema games       -- shows structure of the games table
-</code></pre>
-<hr>
-<h3>Example Query Output</h3>
-<p>After running this schema, if you query:</p>
-<pre><code class="language-sql">SELECT title, release_year, name AS genre
-FROM games
-JOIN genres ON games.genre_id = genres.id;
-</code></pre>
-<p>You’ll get something like:</p>
-<table>
-<thead>
-<tr>
-<th>title</th>
-<th>release_year</th>
-<th>genre</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>The Witcher 3: Wild Hunt</td>
-<td>2015</td>
-<td>RPG</td>
-</tr>
-<tr>
-<td>God of War</td>
-<td>2018</td>
-<td>Action</td>
-</tr>
-<tr>
-<td>Halo Infinite</td>
-<td>2021</td>
-<td>Action</td>
-</tr>
-</tbody></table>
-<hr>
-<h3>🧪 How to Run schema.sql</h3>
-<p>Inside your project directory:</p>
-<pre><code class="language-bash">cd database
-sqlite3 games.db &lt; schema.sql
-</code></pre>
-<p>✅ This command:</p>
-<ul>
-<li>Opens (or creates) <code>games.db</code></li>
-<li>Runs every SQL statement in <code>schema.sql</code></li>
-<li>Populates the database with tables and sample data</li>
-</ul>
-<p>To verify:</p>
-<pre><code class="language-bash">sqlite3 games.db
-.tables              # lists all tables
-SELECT * FROM games; # view inserted records
-</code></pre>
-<hr>
-<h3>✅ Outcome</h3>
-<p>After executing this script, you now have:</p>
-<ul>
-<li>3 tables (<code>games</code>, <code>genres</code>, <code>platforms</code>)</li>
-<li>Proper relationships via foreign keys</li>
-<li>Example records ready for backend queries</li>
-</ul>
